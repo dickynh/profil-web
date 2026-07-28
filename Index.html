@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile Aku , DQLinax</title>
+    <style>
+        /* --- RESET & BASIC STYLE --- */
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        body { background-color: #1a1a1a; color: #f0f0f0; overflow-x: hidden; }
+        a { text-decoration: none; color: inherit; }
+
+        /* --- HEADER / NAVBAR --- */
+        header {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 20px 50px; position: fixed; width: 100%; top: 0;
+            background: rgba(26, 26, 26, 0.95); backdrop-filter: blur(8px); z-index: 1000;
+        }
+        .logo { font-size: 1.5rem; font-weight: bold; color: #00d4ff; }
+        nav ul { display: flex; list-style: none; gap: 20px; }
+        nav a:hover { color: #00d4ff; transition: 0.3s; }
+
+        /* --- HERO SECTION --- */
+        .hero {
+            height: 100vh; display: flex; flex-direction: column;
+            justify-content: center; align-items: center; text-align: center;
+            padding: 0 20px; position: relative;
+        }
+
+        /* Style untuk Foto Profile */
+        .profile-img-container {
+            width: 150px; height: 150px; margin-bottom: 20px;
+            border-radius: 50%; overflow: hidden;
+            border: 4px solid #00d4ff;
+            box-shadow: 0 0 25px rgba(0, 212, 255, 0.6);
+            opacity: 0; animation: zoomIn 1s forwards;
+            position: relative; z-index: 2;
+        }
+        .profile-img { width: 100%; height: 100%; object-fit: cover; }
+
+        .hero h1 { font-size: 2.5rem; margin-bottom: 10px; opacity: 0; animation: fadeInDown 1s 0.3s forwards; position: relative; z-index: 2; }
+        .hero p { font-size: 1.1rem; color: #aaa; max-width: 600px; margin-bottom: 30px; opacity: 0; animation: fadeInUp 1s 0.6s forwards; position: relative; z-index: 2; }
+        
+        .btn {
+            padding: 12px 30px; background: #00d4ff; color: #1a1a1a;
+            border-radius: 25px; font-weight: bold; cursor: pointer;
+            transition: transform 0.3s, box-shadow 0.3s;
+            opacity: 0; animation: fadeInUp 1s 0.9s forwards;
+            position: relative; z-index: 2;
+        }
+        .btn:hover { transform: scale(1.05); box-shadow: 0 0 20px #00d4ff; }
+
+        /* --- CANVAS BACKGROUND --- */
+        #brandCanvas {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            z-index: 1; opacity: 1; 
+        }
+
+        /* --- ABOUT & SKILLS SECTION --- */
+        section { padding: 80px 20px; max-width: 1000px; margin: 0 auto; position: relative; z-index: 2; }
+        h2 { font-size: 2rem; margin-bottom: 40px; text-align: center; color: #00d4ff; }
+        .card-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; }
+        
+        .card {
+            background: #2a2a2a; padding: 20px; border-radius: 10px; border: 1px solid #333;
+            opacity: 0; transform: translateY(50px); transition: all 0.6s ease-out;
+        }
+        .card.visible { opacity: 1; transform: translateY(0); }
+        .card:hover { transform: translateY(-10px); border-color: #00d4ff; }
+
+        /* --- FOOTER --- */
+        footer { text-align: center; padding: 20px; background: #111; color: #777; font-size: 0.9rem; position: relative; z-index: 2; }
+
+        /* --- ANIMATIONS KEYFRAMES --- */
+        @keyframes fadeInDown { from { opacity: 0; transform: translateY(-30px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes fadeInUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes zoomIn { from { opacity: 0; transform: scale(0.5); } to { opacity: 1; transform: scale(1); } }
+
+        @media (max-width: 600px) {
+            .hero h1 { font-size: 1.8rem; } 
+            header { padding: 15px 20px; }
+            .profile-img-container { width: 120px; height: 120px; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Canvas untuk Animasi Branding -->
+    <canvas id="brandCanvas"></canvas>
+
+    <!-- Navbar -->
+    <header>
+        <div class="logo">DQLinax.</div>
+        <nav>
+            <ul>
+                <li><a href="#home">Home</a></li>
+                <li><a href="#about">About</a></li>
+                <li><a href="#projects">Projects</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <section id="home" class="hero">
+        <div class="profile-img-container">
+            <img src="foto.jpg" alt="Foto Profile" class="profile-img">
+        </div>
+        <h1>Halo, <span style="color:#00d4ff;"> Aku DQLinax</span></h1>
+        <p>Saya seorang Web Developer yang suka membuat tampilan website yang menarik dan interaktif dengan HTML5 & CSS3.</p>
+        <a href="#about" class="btn">Lihat Profil</a>
+    </section>
+
+    <!-- About Section -->
+    <section id="about">
+        <h2>Tentang Saya</h2>
+        <div class="card-container">
+            <div class="card scroll-element"><h3>🎨 Desain</h3><p>Fokus pada UI/UX yang bersih dan modern agar pengguna nyaman.</p></div>
+            <div class="card scroll-element"><h3> Coding</h3><p>Menguasai HTML, CSS, JavaScript, dan framework modern.</p></div>
+            <div class="card scroll-element"><h3>🚀 Performa</h3><p>Memastikan website cepat diakses dan ringan di semua perangkat.</p></div>
+        </div>
+    </section>
+
+    <!-- Projects Section -->
+    <section id="projects">
+        <h2>Proyek Terbaru</h2>
+        <div class="card-container">
+            <div class="card scroll-element"><h3>Website Toko Online</h3><p>Membangun toko online responsif dengan fitur keranjang belanja.</p></div>
+            <div class="card scroll-element"><h3>Aplikasi To-Do List</h3><p>Aplikasi manajemen tugas harian menggunakan LocalStorage.</p></div>
+        </div>
+    </section>
+
+    <footer><p>&copy; 2026 Aku , DQLinax. Dibuat dengan ❤️ di Acode.</p></footer>
+
+    <!-- JavaScript Utama (CLEAN SWIVEL ONLY - NO BOUNDARY GLOW) -->
+    <script>
+        // 1. SCROLL ANIMATION
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('visible'); });
+        }, { threshold: 0.1 });
+        document.querySelectorAll('.scroll-element').forEach((el) => observer.observe(el));
+
+        // 2. ANIMASI LOGO PENA INFORMATIKA + SWIVEL ROTATION ONLY
+        const canvas = document.getElementById('brandCanvas');
+        const ctx = canvas.getContext('2d');
+        
+        const logoImg = new Image();
+        logoImg.src = "logopena.png"; 
+        
+        let x = 50, y = 50, dx = 2, dy = 2; 
+        let logoSize = 100; 
+        let rotationAngle = 0; 
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            
+            // UKURAN LOGO RESPONSIF
+            if (window.innerWidth < 768) {
+                logoSize = Math.min(canvas.width * 0.3, 160); 
+            } else {
+                logoSize = Math.min(canvas.width * 0.15, 180); 
+            }
+        }
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        function animateBrand() {
+            requestAnimationFrame(animateBrand);
+            
+            // CLEAR SEPENUHNYA SETIAP FRAME
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            // Logika Pantulan
+            if (x + logoSize > canvas.width || x < 0) dx = -dx;
+            if (y + logoSize > canvas.height || y < 0) dy = -dy;
+            x += dx; y += dy;
+
+            // Update Rotasi (Swivel)
+            rotationAngle += 0.02; 
+
+            ctx.save();
+            
+            // PINDAHKAN POSISI KE TENGAH LOGO UNTUK ROTASI
+            ctx.translate(x + logoSize / 2, y + logoSize / 2);
+            ctx.rotate(rotationAngle);
+            
+            // GAMBAR LOGO YANG BERPUTAR (TANPA EFEK GLOW/BOUNDARY)
+            ctx.drawImage(logoImg, -logoSize / 2, -logoSize / 2, logoSize, logoSize);
+
+            ctx.restore();
+        }
+
+        logoImg.onload = () => animateBrand();
+        logoImg.onerror = () => { console.log("Logo belum ditemukan, silakan simpan file logopena.png"); };
+    </script>
+
+</body>
+</html>
