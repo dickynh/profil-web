@@ -120,14 +120,26 @@
         </div>
     </section>
 
+    <!-- Projects Section (DIPERBARUI) -->
     <!-- Projects Section -->
     <section id="projects">
-        <h2>Proyek Terbaru</h2>
+        <h2>Layanan & Produk Unggulan</h2>
         <div class="card-container">
-            <div class="card scroll-element"><h3>Website Toko Online</h3><p>Membangun toko online responsif dengan fitur keranjang belanja.</p></div>
+            <!-- PRODUK BARU -->
+            <div class="card scroll-element"><h3>🔧 Konfigurasi VPS Linux</h3><p>Setup server Ubuntu/Debian, keamanan dasar, dan optimasi performa.</p></div>
+            <div class="card scroll-element"><h3>🛍️ Platform UMKM Digital</h3><p>Pembuatan toko online dan sistem manajemen pesanan khusus UMKM.</p></div>
+            <div class="card scroll-element"><h3>🎨 Visualisasi Bahan Ajar</h3><p>Konversi materi pelajaran menjadi konten digital interaktif & infografis.</p></div>
+            <div class="card scroll-element"><h3> Web Development</h3><p>Pengembangan website responsif, cepat, dan SEO-friendly.</p></div>
+            <div class="card scroll-element"><h3>📱 App Development</h3><p>Pembuatan aplikasi mobile Android/iOS custom sesuai kebutuhan.</p></div>
+            <div class="card scroll-element"><h3>🍽️ Aplikasi Pemesanan</h3><p>Sistem booking online terintegrasi pembayaran & notifikasi real-time.</p></div>
+            <div class="card scroll-element"><h3>🔔 JadwalKu Guru</h3><p>Aplikasi pengingat jadwal mengajar otomatis via suara TTS. Setup + Garansi.</p></div>
+            
+            <!-- PROYEK LAMA (Diperbarui) -->
+            <div class="card scroll-element"><h3>🛒 Platform UMKM</h3><p>Membangun platform e-commerce lengkap dengan fitur keranjang, checkout, dan dashboard admin.</p></div>
             <div class="card scroll-element"><h3>Aplikasi To-Do List</h3><p>Aplikasi manajemen tugas harian menggunakan LocalStorage.</p></div>
         </div>
     </section>
+
 
     <footer><p>&copy; 2026 Aku , DQLinax. Dibuat dengan ❤️ di Acode.</p></footer>
 
@@ -192,6 +204,30 @@
 
         logoImg.onload = () => animateBrand();
         logoImg.onerror = () => { console.log("Logo belum ditemukan, silakan simpan file logopena.png"); };
+    </script>
+
+    <!-- === SCRIPT PROTEKSI TAMBAHAN === -->
+    <script>
+        // Proteksi Klik Kanan
+        document.addEventListener('contextmenu', function(e) {
+            e.preventDefault();
+            alert('️ PERINGATAN HAK CIPTA!\n\nHalaman ini merupakan portofolio digital DQLinax.\nDilarang keras menyalin, memodifikasi, atau mendistribusikan tanpa izin.');
+        });
+
+        // Proteksi Shortcut Developer Tools
+        document.addEventListener('keydown', function(e) {
+            // Cek kombinasi Ctrl+U, Ctrl+S, Ctrl+I, F12
+            if ((e.ctrlKey && ['u', 's', 'i'].includes(e.key.toLowerCase())) || e.key === 'F12') {
+                e.preventDefault();
+                alert('🔒 Fitur developer telah dinonaktifkan demi keamanan konten.');
+            }
+        });
+
+        // Proteksi Drag Gambar
+        document.addEventListener('dragstart', function(e) {
+            e.preventDefault();
+            return false;
+        });
     </script>
 
 </body>
