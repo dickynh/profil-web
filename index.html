@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Profile Aku , DQLinax</title>
+    <title>Pena Informatika | Solusi Digital oleh Dicky Nofyan Hidayat</title>
+    <meta name="description" content="Jasa pembuatan aplikasi JadwalKu Guru, Platform UMKM, dan konfigurasi VPS Linux oleh Dicky Nofyan Hidayat (Pena Informatika). Garansi berfungsi & setup langsung.">
     <style>
         /* --- RESET & BASIC STYLE --- */
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
@@ -16,7 +17,18 @@
             padding: 20px 50px; position: fixed; width: 100%; top: 0;
             background: rgba(26, 26, 26, 0.95); backdrop-filter: blur(8px); z-index: 1000;
         }
-        .logo { font-size: 1.5rem; font-weight: bold; color: #00d4ff; }
+        .logo-container { display: flex; align-items: center; gap: 12px; }
+        .logo-img { width: 40px; height: 40px; object-fit: contain; }
+        .logo-text { 
+    font-size: 1.5rem; 
+    font-weight: 800; /* Lebih tebal agar PI terlihat solid */
+    letter-spacing: -1px; /* Rapatkan sedikit agar P dan I menyatu */
+}
+
+/* Warna khusus per huruf */
+.logo-p { color: #8A2BE2; } /* Ungu Pena */
+.logo-i { color: #00D4FF; } /* Cyan Informatika */
+
         nav ul { display: flex; list-style: none; gap: 20px; }
         nav a:hover { color: #00d4ff; transition: 0.3s; }
 
@@ -27,7 +39,6 @@
             padding: 0 20px; position: relative;
         }
 
-        /* Style untuk Foto Profile */
         .profile-img-container {
             width: 150px; height: 150px; margin-bottom: 20px;
             border-radius: 50%; overflow: hidden;
@@ -41,14 +52,15 @@
         .hero h1 { font-size: 2.5rem; margin-bottom: 10px; opacity: 0; animation: fadeInDown 1s 0.3s forwards; position: relative; z-index: 2; }
         .hero p { font-size: 1.1rem; color: #aaa; max-width: 600px; margin-bottom: 30px; opacity: 0; animation: fadeInUp 1s 0.6s forwards; position: relative; z-index: 2; }
         
+        .btn-group { display: flex; gap: 15px; flex-wrap: wrap; justify-content: center; opacity: 0; animation: fadeInUp 1s 0.9s forwards; position: relative; z-index: 2; }
         .btn {
             padding: 12px 30px; background: #00d4ff; color: #1a1a1a;
             border-radius: 25px; font-weight: bold; cursor: pointer;
             transition: transform 0.3s, box-shadow 0.3s;
-            opacity: 0; animation: fadeInUp 1s 0.9s forwards;
-            position: relative; z-index: 2;
         }
         .btn:hover { transform: scale(1.05); box-shadow: 0 0 20px #00d4ff; }
+        .btn-secondary { background: transparent; border: 2px solid #00d4ff; color: #00d4ff; }
+        .btn-secondary:hover { background: rgba(0, 212, 255, 0.1); box-shadow: none; }
 
         /* --- CANVAS BACKGROUND --- */
         #brandCanvas {
@@ -59,14 +71,31 @@
         /* --- ABOUT & SKILLS SECTION --- */
         section { padding: 80px 20px; max-width: 1000px; margin: 0 auto; position: relative; z-index: 2; }
         h2 { font-size: 2rem; margin-bottom: 40px; text-align: center; color: #00d4ff; }
-        .card-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; }
+        .card-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; }
         
         .card {
-            background: #2a2a2a; padding: 20px; border-radius: 10px; border: 1px solid #333;
+            background: #2a2a2a; padding: 25px; border-radius: 10px; border: 1px solid #333;
             opacity: 0; transform: translateY(50px); transition: all 0.6s ease-out;
+            position: relative;
         }
         .card.visible { opacity: 1; transform: translateY(0); }
         .card:hover { transform: translateY(-10px); border-color: #00d4ff; }
+
+        .badge-bestseller {
+            position: absolute; top: -12px; right: -12px;
+            background: #ff6b6b; color: white; font-size: 0.75rem; font-weight: bold;
+            padding: 5px 12px; border-radius: 20px; box-shadow: 0 4px 10px rgba(255, 107, 107, 0.4);
+        }
+
+        .card h3 { color: #00d4ff; font-size: 1.1rem; margin-bottom: 10px; }
+        .card p { font-size: 0.9rem; color: #ccc; line-height: 1.5; margin-bottom: 15px; }
+
+        .btn-card {
+            display: inline-block; padding: 8px 20px; background: rgba(0, 212, 255, 0.15);
+            color: #00d4ff; border: 1px solid #00d4ff; border-radius: 20px;
+            font-size: 0.85rem; font-weight: bold; transition: all 0.3s;
+        }
+        .btn-card:hover { background: #00d4ff; color: #1a1a1a; }
 
         /* --- FOOTER --- */
         footer { text-align: center; padding: 20px; background: #111; color: #777; font-size: 0.9rem; position: relative; z-index: 2; }
@@ -80,6 +109,9 @@
             .hero h1 { font-size: 1.8rem; } 
             header { padding: 15px 20px; }
             .profile-img-container { width: 120px; height: 120px; }
+            .btn-group { flex-direction: column; width: 100%; }
+            .btn { width: 100%; }
+            .logo-text { font-size: 1.2rem; }
         }
     </style>
 </head>
@@ -90,12 +122,18 @@
 
     <!-- Navbar -->
     <header>
-        <div class="logo">DQLinax.</div>
+<div class="logo-container">
+    <img src="logopena.png" alt="Logo Pena Informatika" class="logo-img">
+    <span class="logo-text">
+        <span class="logo-p">P </span><span class="logo-i">I</span>
+    </span>
+</div>
+
         <nav>
             <ul>
                 <li><a href="#home">Home</a></li>
                 <li><a href="#about">About</a></li>
-                <li><a href="#projects">Projects</a></li>
+                <li><a href="#projects">Layanan</a></li>
             </ul>
         </nav>
     </header>
@@ -103,11 +141,14 @@
     <!-- Hero Section -->
     <section id="home" class="hero">
         <div class="profile-img-container">
-            <img src="foto.jpg" alt="Foto Profile" class="profile-img">
+            <img src="foto.jpg" alt="Foto Profil Dicky Nofyan Hidayat - Developer Pena Informatika" class="profile-img">
         </div>
-        <h1>Halo, <span style="color:#00d4ff;"> Aku DQLinax</span></h1>
-        <p>Saya seorang Web Developer yang suka membuat tampilan website yang menarik dan interaktif dengan HTML5 & CSS3.</p>
-        <a href="#about" class="btn">Lihat Profil</a>
+        <h1>Halo, <span style="color:#00d4ff;">Aku DQLinax</span></h1>
+        <p>Developer di balik <strong>Pena Informatika</strong>. Membantu Guru & UMKM Go Digital dengan Solusi Teknologi yang Terjangkau, Bergaransi, dan Mudah Digunakan.</p>
+        <div class="btn-group">
+            <a href="#projects" class="btn">Lihat Layanan</a>
+            <a href="https://wa.me/6281313966556?text=Halo%20Pak%20Dicky,%20saya%20ingin%20konsultasi%20solusi%20digital" target="_blank" class="btn btn-secondary">Chat via WhatsApp</a>
+        </div>
     </section>
 
     <!-- About Section -->
@@ -115,35 +156,78 @@
         <h2>Tentang Saya</h2>
         <div class="card-container">
             <div class="card scroll-element"><h3>🎨 Desain</h3><p>Fokus pada UI/UX yang bersih dan modern agar pengguna nyaman.</p></div>
-            <div class="card scroll-element"><h3> Coding</h3><p>Menguasai HTML, CSS, JavaScript, dan framework modern.</p></div>
-            <div class="card scroll-element"><h3>🚀 Performa</h3><p>Memastikan website cepat diakses dan ringan di semua perangkat.</p></div>
+            <div class="card scroll-element"><h3>💻 Coding</h3><p>Menguasai HTML, CSS, JavaScript, dan framework modern.</p></div>
+            <div class="card scroll-element"><h3> Performa</h3><p>Memastikan website cepat diakses dan ringan di semua perangkat.</p></div>
         </div>
     </section>
 
-    <!-- Projects Section (DIPERBARUI) -->
     <!-- Projects Section -->
     <section id="projects">
         <h2>Layanan & Produk Unggulan</h2>
         <div class="card-container">
-            <!-- PRODUK BARU -->
-            <div class="card scroll-element"><h3>🔧 Konfigurasi VPS Linux</h3><p>Setup server Ubuntu/Debian, keamanan dasar, dan optimasi performa.</p></div>
-            <div class="card scroll-element"><h3>🛍️ Platform UMKM Digital</h3><p>Pembuatan toko online dan sistem manajemen pesanan khusus UMKM.</p></div>
-            <div class="card scroll-element"><h3>🎨 Visualisasi Bahan Ajar</h3><p>Konversi materi pelajaran menjadi konten digital interaktif & infografis.</p></div>
-            <div class="card scroll-element"><h3> Web Development</h3><p>Pengembangan website responsif, cepat, dan SEO-friendly.</p></div>
-            <div class="card scroll-element"><h3>📱 App Development</h3><p>Pembuatan aplikasi mobile Android/iOS custom sesuai kebutuhan.</p></div>
-            <div class="card scroll-element"><h3>🍽️ Aplikasi Pemesanan</h3><p>Sistem booking online terintegrasi pembayaran & notifikasi real-time.</p></div>
-            <div class="card scroll-element"><h3>🔔 JadwalKu Guru</h3><p>Aplikasi pengingat jadwal mengajar otomatis via suara TTS. Setup + Garansi.</p></div>
             
-            <!-- PROYEK LAMA (Diperbarui) -->
-            <div class="card scroll-element"><h3>🛒 Platform UMKM</h3><p>Membangun platform e-commerce lengkap dengan fitur keranjang, checkout, dan dashboard admin.</p></div>
-            <div class="card scroll-element"><h3>Aplikasi To-Do List</h3><p>Aplikasi manajemen tugas harian menggunakan LocalStorage.</p></div>
+            <div class="card scroll-element">
+                <h3>🔧 Konfigurasi VPS Linux</h3>
+                <p>Setup server Ubuntu/Debian, keamanan dasar, dan optimasi performa.</p>
+                <a href="https://wa.me/6281313966556?text=Halo%20Pak%20Dicky,%20saya%20tertarik%20dengan%20Konfigurasi%20VPS%20Linux" target="_blank" class="btn-card">Tanya Detail →</a>
+            </div>
+
+            <div class="card scroll-element">
+                <h3>🛍️ Platform UMKM Digital</h3>
+                <p>Pembuatan toko online dan sistem manajemen pesanan khusus UMKM.</p>
+                <a href="https://wa.me/6281313966556?text=Halo%20Pak%20Dicky,%20saya%20tertarik%20dengan%20Platform%20UMKM%20Digital" target="_blank" class="btn-card">Tanya Detail →</a>
+            </div>
+
+            <div class="card scroll-element">
+                <h3>🎨 Visualisasi Bahan Ajar</h3>
+                <p>Konversi materi pelajaran menjadi konten digital interaktif & infografis.</p>
+                <a href="https://wa.me/6281313966556?text=Halo%20Pak%20Dicky,%20saya%20tertarik%20dengan%20Visualisasi%20Bahan%20Ajar" target="_blank" class="btn-card">Tanya Detail →</a>
+            </div>
+
+            <div class="card scroll-element">
+                <h3>🌐 Web Development</h3>
+                <p>Pengembangan website responsif, cepat, dan SEO-friendly.</p>
+                <a href="https://wa.me/6281313966556?text=Halo%20Pak%20Dicky,%20saya%20tertarik%20dengan%20Web%20Development" target="_blank" class="btn-card">Tanya Detail →</a>
+            </div>
+
+            <div class="card scroll-element">
+                <h3>📱 App Development</h3>
+                <p>Pembuatan aplikasi mobile Android/iOS custom sesuai kebutuhan.</p>
+                <a href="https://wa.me/6281313966556?text=Halo%20Pak%20Dicky,%20saya%20tertarik%20dengan%20App%20Development" target="_blank" class="btn-card">Tanya Detail →</a>
+            </div>
+
+            <div class="card scroll-element">
+                <h3>️ Aplikasi Pemesanan</h3>
+                <p>Sistem booking online terintegrasi pembayaran & notifikasi real-time.</p>
+                <a href="https://wa.me/6281313966556?text=Halo%20Pak%20Dicky,%20saya%20tertarik%20dengan%20Aplikasi%20Pemesanan" target="_blank" class="btn-card">Tanya Detail →</a>
+            </div>
+
+            <!-- PRODUK UNGGULAN DENGAN BADGE -->
+            <div class="card scroll-element" style="border-color: #ff6b6b;">
+                <span class="badge-bestseller">BEST SELLER 🔥</span>
+                <h3>🔔 JadwalKu Guru</h3>
+                <p>Aplikasi pengingat jadwal mengajar otomatis via suara TTS. Setup + Garansi bunyi saat HP terkunci.</p>
+                <a href="https://wa.me/6281313966556?text=Halo%20Pak%20Dicky,%20saya%20mau%20order%20JadwalKu%20Guru" target="_blank" class="btn-card" style="background: #ff6b6b; border-color: #ff6b6b; color: white;">Order Sekarang →</a>
+            </div>
+            
+            <div class="card scroll-element">
+                <h3>🛒 Platform UMKM</h3>
+                <p>Membangun platform e-commerce lengkap dengan fitur keranjang, checkout, dan dashboard admin.</p>
+                <a href="https://wa.me/6281313966556?text=Halo%20Pak%20Dicky,%20saya%20tertarik%20dengan%20Platform%20UMKM" target="_blank" class="btn-card">Tanya Detail →</a>
+            </div>
+
+            <div class="card scroll-element">
+                <h3>✅ Aplikasi To-Do List</h3>
+                <p>Aplikasi manajemen tugas harian menggunakan LocalStorage.</p>
+                <a href="https://wa.me/62813966556?text=Halo%20Pak%20Dicky,%20saya%20tertarik%20dengan%20Aplikasi%20To-Do%20List" target="_blank" class="btn-card">Tanya Detail →</a>
+            </div>
+
         </div>
     </section>
 
+    <footer><p>&copy; 2026 Pena Informatika by Dicky Nofyan Hidayat. Dibuat dengan ❤️ di Acode.</p></footer>
 
-    <footer><p>&copy; 2026 Aku , DQLinax. Dibuat dengan ❤️ di Acode.</p></footer>
-
-    <!-- JavaScript Utama (CLEAN SWIVEL ONLY - NO BOUNDARY GLOW) -->
+    <!-- JavaScript Utama -->
     <script>
         // 1. SCROLL ANIMATION
         const observer = new IntersectionObserver((entries) => {
@@ -166,7 +250,6 @@
             canvas.width = window.innerWidth;
             canvas.height = window.innerHeight;
             
-            // UKURAN LOGO RESPONSIF
             if (window.innerWidth < 768) {
                 logoSize = Math.min(canvas.width * 0.3, 160); 
             } else {
@@ -178,27 +261,18 @@
 
         function animateBrand() {
             requestAnimationFrame(animateBrand);
-            
-            // CLEAR SEPENUHNYA SETIAP FRAME
             ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-            // Logika Pantulan
             if (x + logoSize > canvas.width || x < 0) dx = -dx;
             if (y + logoSize > canvas.height || y < 0) dy = -dy;
             x += dx; y += dy;
 
-            // Update Rotasi (Swivel)
             rotationAngle += 0.02; 
 
             ctx.save();
-            
-            // PINDAHKAN POSISI KE TENGAH LOGO UNTUK ROTASI
             ctx.translate(x + logoSize / 2, y + logoSize / 2);
             ctx.rotate(rotationAngle);
-            
-            // GAMBAR LOGO YANG BERPUTAR (TANPA EFEK GLOW/BOUNDARY)
             ctx.drawImage(logoImg, -logoSize / 2, -logoSize / 2, logoSize, logoSize);
-
             ctx.restore();
         }
 
@@ -208,22 +282,18 @@
 
     <!-- === SCRIPT PROTEKSI TAMBAHAN === -->
     <script>
-        // Proteksi Klik Kanan
         document.addEventListener('contextmenu', function(e) {
             e.preventDefault();
-            alert('️ PERINGATAN HAK CIPTA!\n\nHalaman ini merupakan portofolio digital DQLinax.\nDilarang keras menyalin, memodifikasi, atau mendistribusikan tanpa izin.');
+            alert('⚠️ PERINGATAN HAK CIPTA!\n\nHalaman ini merupakan portofolio digital Pena Informatika.\nDilarang keras menyalin, memodifikasi, atau mendistribusikan tanpa izin.');
         });
 
-        // Proteksi Shortcut Developer Tools
         document.addEventListener('keydown', function(e) {
-            // Cek kombinasi Ctrl+U, Ctrl+S, Ctrl+I, F12
             if ((e.ctrlKey && ['u', 's', 'i'].includes(e.key.toLowerCase())) || e.key === 'F12') {
                 e.preventDefault();
                 alert('🔒 Fitur developer telah dinonaktifkan demi keamanan konten.');
             }
         });
 
-        // Proteksi Drag Gambar
         document.addEventListener('dragstart', function(e) {
             e.preventDefault();
             return false;
@@ -231,4 +301,5 @@
     </script>
 
 </body>
-</html>
+                </html>
+                
