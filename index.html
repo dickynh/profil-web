@@ -96,6 +96,69 @@
             font-size: 0.85rem; font-weight: bold; transition: all 0.3s;
         }
         .btn-card:hover { background: #00d4ff; color: #1a1a1a; }
+        /* Container Tombol - Mengisi lebar penuh dengan jarak seimbang */
+.card-buttons {
+    display: flex;
+    justify-content: space-between; /* Tanya Detail kiri, Demo App kanan */
+    align-items: center;
+    gap: 15px;
+    margin-top: auto;
+    width: 100%;
+}
+
+/* Style Umum Tombol */
+.app-link-btn, .demo-app-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 12px 20px;
+    border-radius: 30px; /* Bentuk kapsul yang lebih modern */
+    font-size: 0.9rem;
+    font-weight: 700;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    white-space: nowrap;
+    flex: 1; /* Agar lebar kedua tombol seimbang */
+    max-width: 48%; /* Mencegah tombol terlalu lebar */
+}
+
+/* Tombol Tanya Detail (Cyan Outline) */
+.app-link-btn {
+    background: transparent;
+    color: #00d4ff;
+    border: 2px solid #00d4ff;
+}
+.app-link-btn:hover {
+    background: rgba(0, 212, 255, 0.1);
+    box-shadow: 0 0 15px rgba(0, 212, 255, 0.4);
+    transform: translateY(-2px);
+}
+
+/* Tombol Demo App (Ungu Solid Gradient - Keren & Menonjol) */
+.demo-app-btn {
+    background: linear-gradient(135deg, #8A2BE2 0%, #6a1b9a 100%);
+    color: #ffffff;
+    border: none;
+    box-shadow: 0 4px 15px rgba(138, 43, 226, 0.3);
+}
+.demo-app-btn:hover {
+    background: linear-gradient(135deg, #9d4edd 0%, #7c2cbf 100%);
+    box-shadow: 0 6px 20px rgba(138, 43, 226, 0.5);
+    transform: translateY(-2px);
+}
+
+/* Responsif HP Kecil */
+@media (max-width: 400px) {
+    .card-buttons {
+        flex-direction: column;
+        gap: 10px;
+    }
+    .app-link-btn, .demo-app-btn {
+        width: 100%;
+        max-width: 100%;
+    }
+}
+        
 
         /* --- FOOTER --- */
         footer { text-align: center; padding: 20px; background: #111; color: #777; font-size: 0.9rem; position: relative; z-index: 2; }
@@ -182,6 +245,10 @@
                 <h3>🎨 Visualisasi Bahan Ajar</h3>
                 <p>Konversi materi pelajaran menjadi konten digital interaktif & infografis.</p>
                 <a href="https://wa.me/628212680190?text=Halo%20Pak%20Dicky,%20saya%20tertarik%20dengan%20Visualisasi%20Bahan%20Ajar" target="_blank" class="btn-card">Tanya Detail →</a>
+                <a href="LINK_DEMO_APP_DISINI" class="demo-app-btn">
+            🚀 Demo App
+                </a>
+                
             </div>
 
             <div class="card scroll-element">
