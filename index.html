@@ -20,14 +20,12 @@
         .logo-container { display: flex; align-items: center; gap: 12px; }
         .logo-img { width: 40px; height: 40px; object-fit: contain; }
         .logo-text { 
-    font-size: 1.5rem; 
-    font-weight: 800; /* Lebih tebal agar PI terlihat solid */
-    letter-spacing: -1px; /* Rapatkan sedikit agar P dan I menyatu */
-}
-
-/* Warna khusus per huruf */
-.logo-p { color: #8A2BE2; } /* Ungu Pena */
-.logo-i { color: #00D4FF; } /* Cyan Informatika */
+            font-size: 1.5rem; 
+            font-weight: 800; 
+            letter-spacing: -1px; 
+        }
+        .logo-p { color: #8A2BE2; } 
+        .logo-i { color: #00D4FF; } 
 
         nav ul { display: flex; list-style: none; gap: 20px; }
         nav a:hover { color: #00d4ff; transition: 0.3s; }
@@ -76,7 +74,7 @@
         .card {
             background: #2a2a2a; padding: 25px; border-radius: 10px; border: 1px solid #333;
             opacity: 0; transform: translateY(50px); transition: all 0.6s ease-out;
-            position: relative;
+            display: flex; flex-direction: column; height: 100%; position: relative;
         }
         .card.visible { opacity: 1; transform: translateY(0); }
         .card:hover { transform: translateY(-10px); border-color: #00d4ff; }
@@ -88,77 +86,71 @@
         }
 
         .card h3 { color: #00d4ff; font-size: 1.1rem; margin-bottom: 10px; }
-        .card p { font-size: 0.9rem; color: #ccc; line-height: 1.5; margin-bottom: 15px; }
+        .card p { font-size: 0.9rem; color: #ccc; line-height: 1.5; margin-bottom: 15px; flex-grow: 1; }
 
-        .btn-card {
-            display: inline-block; padding: 8px 20px; background: rgba(0, 212, 255, 0.15);
-            color: #00d4ff; border: 1px solid #00d4ff; border-radius: 20px;
-            font-size: 0.85rem; font-weight: bold; transition: all 0.3s;
+        /* --- BUTTON LAYOUT YANG DIRAPIHKAN --- */
+        .card-buttons {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); 
+            gap: 10px;
+            margin-top: auto;
+            width: 100%;
         }
-        .btn-card:hover { background: #00d4ff; color: #1a1a1a; }
-        /* Container Tombol - Mengisi lebar penuh dengan jarak seimbang */
-.card-buttons {
-    display: flex;
-    justify-content: space-between; /* Tanya Detail kiri, Demo App kanan */
-    align-items: center;
-    gap: 15px;
-    margin-top: auto;
-    width: 100%;
-}
 
-/* Style Umum Tombol */
-.app-link-btn, .demo-app-btn {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    padding: 12px 20px;
-    border-radius: 30px; /* Bentuk kapsul yang lebih modern */
-    font-size: 0.9rem;
-    font-weight: 700;
-    text-decoration: none;
-    transition: all 0.3s ease;
-    white-space: nowrap;
-    flex: 1; /* Agar lebar kedua tombol seimbang */
-    max-width: 48%; /* Mencegah tombol terlalu lebar */
-}
+        /* Tombol Utama (Tanya Detail / Order) - Memenuhi lebar penuh */
+        .app-link-btn {
+            grid-column: 1 / -1; 
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 12px 20px;
+            border-radius: 25px;
+            font-size: 0.9rem;
+            font-weight: 700;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+            
+            background: transparent;
+            color: #00d4ff;
+            border: 2px solid #00d4ff;
+        }
+        .app-link-btn:hover {
+            background: rgba(0, 212, 255, 0.1);
+            box-shadow: 0 0 15px rgba(0, 212, 255, 0.4);
+            transform: translateY(-2px);
+        }
 
-/* Tombol Tanya Detail (Cyan Outline) */
-.app-link-btn {
-    background: transparent;
-    color: #00d4ff;
-    border: 2px solid #00d4ff;
-}
-.app-link-btn:hover {
-    background: rgba(0, 212, 255, 0.1);
-    box-shadow: 0 0 15px rgba(0, 212, 255, 0.4);
-    transform: translateY(-2px);
-}
+        /* Tombol Demo App - Seragam & Rapi */
+        .demo-link-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 10px 15px;
+            border-radius: 25px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            
+            background: transparent;
+            color: #00d4ff;
+            border: 1px solid rgba(0, 212, 255, 0.5);
+        }
+        .demo-link-btn:hover {
+            background: rgba(0, 212, 255, 0.15);
+            border-color: #00d4ff;
+            box-shadow: 0 0 12px rgba(0, 212, 255, 0.2);
+            transform: translateY(-2px);
+        }
 
-/* Tombol Demo App (Ungu Solid Gradient - Keren & Menonjol) */
-.demo-app-btn {
-    background: linear-gradient(135deg, #8A2BE2 0%, #6a1b9a 100%);
-    color: #ffffff;
-    border: none;
-    box-shadow: 0 4px 15px rgba(138, 43, 226, 0.3);
-}
-.demo-app-btn:hover {
-    background: linear-gradient(135deg, #9d4edd 0%, #7c2cbf 100%);
-    box-shadow: 0 6px 20px rgba(138, 43, 226, 0.5);
-    transform: translateY(-2px);
-}
-
-/* Responsif HP Kecil */
-@media (max-width: 400px) {
-    .card-buttons {
-        flex-direction: column;
-        gap: 10px;
-    }
-    .app-link-btn, .demo-app-btn {
-        width: 100%;
-        max-width: 100%;
-    }
-}
-        
+        /* Responsif HP Sangat Kecil */
+        @media (max-width: 380px) {
+            .card-buttons {
+                grid-template-columns: 1fr; 
+            }
+        }
 
         /* --- FOOTER --- */
         footer { text-align: center; padding: 20px; background: #111; color: #777; font-size: 0.9rem; position: relative; z-index: 2; }
@@ -185,13 +177,12 @@
 
     <!-- Navbar -->
     <header>
-<div class="logo-container">
-    <img src="logopena.png" alt="Logo Pena Informatika" class="logo-img">
-    <span class="logo-text">
-        <span class="logo-p">P </span><span class="logo-i">I</span>
-    </span>
-</div>
-
+        <div class="logo-container">
+            <img src="logopena.png" alt="Logo Pena Informatika" class="logo-img">
+            <span class="logo-text">
+                <span class="logo-p">P </span><span class="logo-i">I</span>
+            </span>
+        </div>
         <nav>
             <ul>
                 <li><a href="#home">Home</a></li>
@@ -220,7 +211,7 @@
         <div class="card-container">
             <div class="card scroll-element"><h3>🎨 Desain</h3><p>Fokus pada UI/UX yang bersih dan modern agar pengguna nyaman.</p></div>
             <div class="card scroll-element"><h3>💻 Coding</h3><p>Menguasai HTML, CSS, JavaScript, dan framework modern.</p></div>
-            <div class="card scroll-element"><h3> Performa</h3><p>Memastikan website cepat diakses dan ringan di semua perangkat.</p></div>
+            <div class="card scroll-element"><h3>🚀 Performa</h3><p>Memastikan website cepat diakses dan ringan di semua perangkat.</p></div>
         </div>
     </section>
 
@@ -229,71 +220,89 @@
         <h2>Layanan & Produk Unggulan</h2>
         <div class="card-container">
             
+            <!-- VPS Linux -->
             <div class="card scroll-element">
                 <h3>🔧 Konfigurasi VPS Linux</h3>
                 <p>Setup server Ubuntu/Debian, keamanan dasar, dan optimasi performa.</p>
-                <a href="https://wa.me/628212680190?text=Halo%20Pak%20Dicky,%20saya%20tertarik%20dengan%20Konfigurasi%20VPS%20Linux" target="_blank" class="btn-card">Tanya Detail →</a>
+                <div class="card-buttons">
+                    <a href="https://wa.me/628212680190?text=Halo%20Pak%20Dicky,%20saya%20tertarik%20dengan%20Konfigurasi%20VPS%20Linux" target="_blank" class="app-link-btn">Tanya Detail →</a>
+                </div>
             </div>
 
+            <!-- Platform UMKM Digital -->
             <div class="card scroll-element">
                 <h3>🛍️ Platform UMKM Digital</h3>
                 <p>Pembuatan toko online dan sistem manajemen pesanan khusus UMKM.</p>
-                <a href="https://wa.me/628212680190?text=Halo%20Pak%20Dicky,%20saya%20tertarik%20dengan%20Platform%20UMKM%20Digital" target="_blank" class="btn-card">Tanya Detail →</a>
+                <div class="card-buttons">
+                    <a href="https://wa.me/628212680190?text=Halo%20Pak%20Dicky,%20saya%20tertarik%20dengan%20Platform%20UMKM%20Digital" target="_blank" class="app-link-btn">Tanya Detail →</a>
+                </div>
             </div>
 
+            <!-- Visualisasi Bahan Ajar (SUDAH DIRAPIHKAN DENGAN GRID) -->
             <div class="card scroll-element">
-                <h3>🎨 Visualisasi Bahan Ajar</h3>
+                <h3> Visualisasi Bahan Ajar</h3>
                 <p>Konversi materi pelajaran menjadi konten digital interaktif & infografis.</p>
-                <a href="https://wa.me/628212680190?text=Halo%20Pak%20Dicky,%20saya%20tertarik%20dengan%20Visualisasi%20Bahan%20Ajar" target="_blank" class="btn-card">Tanya Detail →</a>
-                <a href="glbb.html" class="btn-card">
-            🚀 GLBB
-                </a>
-                <br>
-                <a href="trigo.html" class="btn-card">
-            🚀 Trigonometri
-                </a>
-                
+                <div class="card-buttons">
+                    <a href="https://wa.me/628212680190?text=Halo%20Pak%20Dicky,%20saya%20tertarik%20dengan%20Visualisasi%20Bahan%20Ajar" target="_blank" class="app-link-btn">Tanya Detail →</a>
+                    <a href="glbb.html" class="demo-link-btn">🚀 GLBB</a>
+                    <a href="trigo.html" class="demo-link-btn">📐 Trigonometri</a>
+                </div>
             </div>
 
+            <!-- Web Development -->
             <div class="card scroll-element">
                 <h3>🌐 Web Development</h3>
                 <p>Pengembangan website responsif, cepat, dan SEO-friendly.</p>
-                <a href="https://wa.me/628212680190?text=Halo%20Pak%20Dicky,%20saya%20tertarik%20dengan%20Web%20Development" target="_blank" class="btn-card">Tanya Detail →</a>
+                <div class="card-buttons">
+                    <a href="https://wa.me/628212680190?text=Halo%20Pak%20Dicky,%20saya%20tertarik%20dengan%20Web%20Development" target="_blank" class="app-link-btn">Tanya Detail →</a>
+                </div>
             </div>
 
+            <!-- App Development -->
             <div class="card scroll-element">
                 <h3>📱 App Development</h3>
                 <p>Pembuatan aplikasi mobile Android/iOS custom sesuai kebutuhan.</p>
-                <a href="https://wa.me/628212680190?text=Halo%20Pak%20Dicky,%20saya%20tertarik%20dengan%20App%20Development" target="_blank" class="btn-card">Tanya Detail →</a>
+                <div class="card-buttons">
+                    <a href="https://wa.me/628212680190?text=Halo%20Pak%20Dicky,%20saya%20tertarik%20dengan%20App%20Development" target="_blank" class="app-link-btn">Tanya Detail →</a>
+                </div>
             </div>
 
+            <!-- Aplikasi Pemesanan -->
             <div class="card scroll-element">
-                <h3>️ Aplikasi Pemesanan</h3>
+                <h3>📅 Aplikasi Pemesanan</h3>
                 <p>Sistem booking online terintegrasi pembayaran & notifikasi real-time.</p>
-                <a href="https://wa.me/628212680190?text=Halo%20Pak%20Dicky,%20saya%20tertarik%20dengan%20Aplikasi%20Pemesanan" target="_blank" class="btn-card">Tanya Detail →</a>
+                <div class="card-buttons">
+                    <a href="https://wa.me/628212680190?text=Halo%20Pak%20Dicky,%20saya%20tertarik%20dengan%20Aplikasi%20Pemesanan" target="_blank" class="app-link-btn">Tanya Detail →</a>
+                </div>
             </div>
 
-            <!-- PRODUK UNGGULAN DENGAN BADGE -->
+            <!-- JadwalKu Guru (BEST SELLER) -->
             <div class="card scroll-element" style="border-color: #ff6b6b;">
                 <span class="badge-bestseller">BEST SELLER 🔥</span>
-                <h3>🔔 JadwalKu Guru</h3>
+                <h3> JadwalKu Guru</h3>
                 <p>Aplikasi pengingat jadwal mengajar otomatis via suara TTS. Setup + Garansi bunyi saat HP terkunci.</p>
-                <a href="https://wa.me/628212680190?text=Halo%20Pak%20Dicky,%20saya%20mau%20order%20JadwalKu%20Guru" target="_blank" class="btn-card" style="background: #ff6b6b; border-color: #ff6b6b; color: white;">Order Sekarang →</a>
-           <a href="https://dickynh.github.io/jadwal-dqnh-2026/" class="btn-card">
-            🚀 Demo
-           </a>
+                <div class="card-buttons">
+                    <a href="https://wa.me/628212680190?text=Halo%20Pak%20Dicky,%20saya%20mau%20order%20JadwalKu%20Guru" target="_blank" class="app-link-btn" style="background: #ff6b6b; border-color: #ff6b6b; color: white;">Order Sekarang →</a>
+                    <a href="https://dickynh.github.io/jadwal-dqnh-2026/" target="_blank" class="demo-link-btn" style="color: #ff6b6b; border-color: rgba(255, 107, 107, 0.5);"> Demo App</a>
+                </div>
             </div>
             
+            <!-- Platform E-Commerce -->
             <div class="card scroll-element">
-                <h3>🛒 Platform UMKM</h3>
+                <h3>🛒 Platform E-Commerce</h3>
                 <p>Membangun platform e-commerce lengkap dengan fitur keranjang, checkout, dan dashboard admin.</p>
-                <a href="https://wa.me/628212680190?text=Halo%20Pak%20Dicky,%20saya%20tertarik%20dengan%20Platform%20UMKM" target="_blank" class="btn-card">Tanya Detail →</a>
+                <div class="card-buttons">
+                    <a href="https://wa.me/628212680190?text=Halo%20Pak%20Dicky,%20saya%20tertarik%20dengan%20Platform%20E-Commerce" target="_blank" class="app-link-btn">Tanya Detail →</a>
+                </div>
             </div>
 
+            <!-- To-Do List -->
             <div class="card scroll-element">
                 <h3>✅ Aplikasi To-Do List</h3>
                 <p>Aplikasi manajemen tugas harian menggunakan LocalStorage.</p>
-                <a href="https://wa.me/628212680190?text=Halo%20Pak%20Dicky,%20saya%20tertarik%20dengan%20Aplikasi%20To-Do%20List" target="_blank" class="btn-card">Tanya Detail →</a>
+                <div class="card-buttons">
+                    <a href="https://wa.me/628212680190?text=Halo%20Pak%20Dicky,%20saya%20tertarik%20dengan%20Aplikasi%20To-Do%20List" target="_blank" class="app-link-btn">Tanya Detail →</a>
+                </div>
             </div>
 
         </div>
@@ -375,5 +384,4 @@
     </script>
 
 </body>
-                </html>
-                
+</html>
