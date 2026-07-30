@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simulasi GLBB - DickyNH</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f0f2f5;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+            color: #333;
+        }
+        h1 {
+            color: #2c3e50;
+            margin-bottom: 5px;
+        }
+        .presenter-tag {
+            font-size: 1.1em;
+            color: #555;
+            margin-bottom: 20px;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 5px;
+            display: inline-block;
+        }
+        .container {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            max-width: 800px;
+            width: 100%;
+            position: relative; /* Untuk watermark */
+        }
+        canvas {
+            border: 1px solid #ddd;
+            background-color: #fff;
+            margin-top: 10px;
+            cursor: crosshair;
+            width: 100%;
+            height: auto;
+        }
+        .controls {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+            padding: 15px;
+            background-color: #ecf0f1;
+            border-radius: 8px;
+        }
+        .control-group {
+            display: flex;
+            flex-direction: column;
+        }
+        label {
+            font-weight: bold;
+            margin-bottom: 5px;
+            font-size: 0.9em;
+        }
+        input[type="number"], input[type="range"] {
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+        .buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+        }
+        button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background 0.3s;
+            flex: 1;
+        }
+        #startBtn { background-color: #27ae60; color: white; }
+        #startBtn:hover { background-color: #219150; }
+        #resetBtn { background-color: #e74c3c; color: white; }
+        #resetBtn:hover { background-color: #c0392b; }
+        
+        .info-panel {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 15px;
+            font-family: monospace;
+            font-size: 1.1em;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .info-item span {
+            font-weight: bold;
+            color: #2980b9;
+        }
+        .watermark {
+            position: absolute;
+            bottom: 15px;
+            right: 20px;
+            font-size: 0.9em;
+            color: rgba(0,0,0,0.15);
+            font-weight: bold;
+            pointer-events: none;
+            z-index: 10;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Simulasi GLBB</h1>
+    <!-- Identitas Presenter -->
+    <div class="presenter-tag">Disampaikan oleh Dicky Nofyan Hidayat, ST, Gr</div>
+    
+    <div class="container">
+        <div class="controls">
+            <div class="control-group">
+                <label for="v0">Kecepatan Awal ($v_0$) m/s:</label>
+                <input type="number" id="v0" value="0" step="1">
+            </div>
+            <div class="control-group">
+                <label for="acc">Percepatan ($a$) m/s²:</label>
+                <input type="number" id="acc" value="2" step="0.5">
+            </div>
+            <div class="control-group">
+                <label for="timeScale">Skala Waktu:</label>
+                <input type="range" id="timeScale" min="0.1" max="2" step="0.1" value="1">
+            </div>
+        </div>
+
+        <div class="buttons">
+            <button id="startBtn">Mulai / Jeda</button>
+            <button id="resetBtn">Reset</button>
+        </div>
+
+        <canvas id="simCanvas"></canvas>
+        <canvas id="graphCanvas"></canvas>
+
+        <div class="info-panel">
+            <div class="info-item">Waktu: <span id="dispTime">0.00</span> s</div>
+            <div class="info-item">Posisi: <span id="dispPos">0.00</span> m</div>
+            <div class="info-item">Kecepatan: <span id="dispVel">0.00</span> m/s</div>
+        </div>
+
+        <!-- Watermark di dalam container -->
+        <div class="watermark">Dicky Nofyan Hidayat, ST, Gr</div>
+    </div>
+
+    <script>
+        // Konfigurasi Canvas
+        const simCanvas = document.getElementById('simCanvas');
+        const simCtx = simCanvas.getContext('2d');
+        const graphCanvas = document.getElementById('graphCanvas');
+        const graphCtx = graphCanvas.getContext('2d');
+
+        // Variabel Fisika
+        let v0 = 0;
+        let a = 2;
+        let t = 0;
+        let isRunning = false;
+        let animationId;
+        let lastTimestamp = 0;
+        let timeScale = 1;
+        let graphData = [];
+
+        // Elemen DOM
+        const v0Input = document.getElementById('v0');
+        const accInput = document.getElementById('acc');
+        const timeScaleInput = document.getElementById('timeScale');
+        const startBtn = document.getElementById('startBtn');
+        const resetBtn = document.getElementById('resetBtn');
+        
+        const dispTime = document.getElementById('dispTime');
+        const dispPos = document.getElementById('dispPos');
+        const dispVel = document.getElementById('dispVel');
+
+        // Parameter Visualisasi Responsif
+        let pixelsPerMeter = 10; 
+        let objectY;
+        let startX;
+
+        // Fungsi untuk mengatur ukuran canvas agar responsif
+        function resizeCanvas() {
+            const containerWidth = document.querySelector('.container').clientWidth - 40; 
+            
+            simCanvas.width = containerWidth;
+            simCanvas.height = 250;
+            
+            graphCanvas.width = containerWidth;
+            graphCanvas.height = 200;
+
+            objectY = simCanvas.height / 2;
+            startX = simCanvas.width * 0.05; 
+            pixelsPerMeter = simCanvas.width / 60; 
+
+            if (!isRunning) {
+                drawScene((v0 * t) + (0.5 * a * t * t));
+                drawGraph();
+            }
+        }
+
+        function updateInputs() {
+            v0 = parseFloat(v0Input.value) || 0;
+            a = parseFloat(accInput.value) || 0;
+            timeScale = parseFloat(timeScaleInput.value) || 1;
+        }
+
+        function drawScene(pos) {
+            simCtx.clearRect(0, 0, simCanvas.width, simCanvas.height);
+
+            // Gambar jalan
+            simCtx.fillStyle = '#bdc3c7';
+            simCtx.fillRect(0, objectY + 20, simCanvas.width, 5);
+
+            // Garis-garis jarak
+            simCtx.strokeStyle = '#7f8c8d';
+            simCtx.font = `${Math.max(10, simCanvas.width * 0.02)}px Arial`;
+            simCtx.textAlign = 'center';
+            
+            const step = 5 * pixelsPerMeter;
+            for (let i = 0; i < simCanvas.width; i += step) {
+                simCtx.beginPath();
+                simCtx.moveTo(startX + i, objectY + 15);
+                simCtx.lineTo(startX + i, objectY + 25);
+                simCtx.stroke();
+                simCtx.fillText((i / pixelsPerMeter).toFixed(0) + 'm', startX + i, objectY + 45);
+            }
+
+            // Gambar Objek (Mobil/Kotak)
+            const currentX = startX + (pos * pixelsPerMeter);
+            const boxSize = simCanvas.height * 0.15; 
+
+            if (currentX < simCanvas.width) {
+                simCtx.fillStyle = '#e74c3c';
+                simCtx.fillRect(currentX, objectY - boxSize, boxSize, boxSize);
+                
+                // Roda
+                simCtx.fillStyle = '#333';
+                const wheelRadius = boxSize * 0.2;
+                simCtx.beginPath();
+                simCtx.arc(currentX + boxSize * 0.25, objectY + 20, wheelRadius, 0, Math.PI * 2);
+                simCtx.arc(currentX + boxSize * 0.75, objectY + 20, wheelRadius, 0, Math.PI * 2);
+                simCtx.fill();
+            } else {
+                simCtx.fillStyle = '#e74c3c';
+                simCtx.fillRect(simCanvas.width - boxSize - 10, objectY - boxSize, boxSize, boxSize);
+                simCtx.fillStyle = 'black';
+                simCtx.font = `${Math.max(12, simCanvas.width * 0.03)}px Arial`;
+                simCtx.fillText("Objek keluar jangkauan", simCanvas.width/2, 30);
+            }
+        }
+
+        function drawGraph() {
+            graphCtx.clearRect(0, 0, graphCanvas.width, graphCanvas.height);
+            
+            const padding = 40;
+            const w = graphCanvas.width - padding * 2;
+            const h = graphCanvas.height - padding * 2;
+            
+            graphCtx.strokeStyle = '#333';
+            graphCtx.lineWidth = 2;
+            graphCtx.beginPath();
+            graphCtx.moveTo(padding, padding);
+            graphCtx.lineTo(padding, graphCanvas.height - padding);
+            graphCtx.lineTo(graphCanvas.width - padding, graphCanvas.height - padding);
+            graphCtx.stroke();
+
+            graphCtx.fillStyle = '#333';
+            graphCtx.font = `${Math.max(12, graphCanvas.width * 0.03)}px Arial`;
+            graphCtx.fillText('v (m/s)', 10, padding);
+            graphCtx.fillText('t (s)', graphCanvas.width - padding, graphCanvas.height - 10);
+
+            if (graphData.length < 2) return;
+
+            const maxT = Math.max(10, graphData[graphData.length-1].t);
+            const maxV = Math.max(10, ...graphData.map(d => d.v));
+            
+            graphCtx.strokeStyle = '#2980b9';
+            graphCtx.lineWidth = 2;
+            graphCtx.beginPath();
+
+            graphData.forEach((point, index) => {
+                const x = padding + (point.t / maxT) * w;
+                const y = (graphCanvas.height - padding) - (point.v / maxV) * h;
+                
+                if (index === 0) graphCtx.moveTo(x, y);
+                else graphCtx.lineTo(x, y);
+            });
+            graphCtx.stroke();
+        }
+
+        function loop(timestamp) {
+            if (!isRunning) return;
+
+            if (!lastTimestamp) lastTimestamp = timestamp;
+            const deltaTime = (timestamp - lastTimestamp) / 1000;
+            lastTimestamp = timestamp;
+
+            t += deltaTime * timeScale;
+
+            const currentV = v0 + (a * t);
+            const currentPos = (v0 * t) + (0.5 * a * t * t);
+
+            graphData.push({ t: t, v: currentV });
+            
+            dispTime.innerText = t.toFixed(2);
+            dispPos.innerText = currentPos.toFixed(2);
+            dispVel.innerText = currentV.toFixed(2);
+
+            drawScene(currentPos);
+            drawGraph();
+
+            animationId = requestAnimationFrame(loop);
+        }
+
+        startBtn.addEventListener('click', () => {
+            updateInputs();
+            if (isRunning) {
+                isRunning = false;
+                cancelAnimationFrame(animationId);
+                startBtn.innerText = "Lanjutkan";
+                lastTimestamp = 0;
+            } else {
+                isRunning = true;
+                lastTimestamp = 0;
+                startBtn.innerText = "Jeda";
+                requestAnimationFrame(loop);
+            }
+        });
+
+        resetBtn.addEventListener('click', () => {
+            isRunning = false;
+            cancelAnimationFrame(animationId);
+            t = 0;
+            graphData = [];
+            lastTimestamp = 0;
+            startBtn.innerText = "Mulai";
+            
+            updateInputs();
+            dispTime.innerText = "0.00";
+            dispPos.innerText = "0.00";
+            dispVel.innerText = "0.00";
+            drawScene(0);
+            drawGraph();
+        });
+
+        window.addEventListener('resize', resizeCanvas);
+
+        // Inisialisasi
+        updateInputs();
+        resizeCanvas();
+        drawScene(0);
+        drawGraph();
+
+    </script>
+</body>
+</html>
