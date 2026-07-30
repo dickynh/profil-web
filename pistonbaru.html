@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gerakan Shalat - Gaya Edukatif</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #fdf6e3; /* Warna kertas buku */
+            font-family: 'Comic Sans MS', 'Chalkboard SE', sans-serif; /* Font gaya anak-anak */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 500px;
+            background: #fff;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            border-radius: 20px;
+            overflow: hidden;
+            margin: 20px;
+            border: 5px solid #ff9a9e;
+        }
+
+        canvas {
+            display: block;
+            width: 100%;
+            height: 450px;
+            background: radial-gradient(circle, #ffffff 60%, #f0f8ff 100%);
+        }
+
+        .ui-panel {
+            padding: 20px;
+            text-align: center;
+            background: #fff;
+        }
+
+        h2 {
+            color: #d35400;
+            margin: 0 0 10px 0;
+            font-size: 1.5rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        p {
+            color: #555;
+            font-size: 1rem;
+            line-height: 1.4;
+            margin-bottom: 20px;
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+        }
+
+        button {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 50px;
+            font-family: inherit;
+            font-weight: bold;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: transform 0.1s;
+            box-shadow: 0 4px 0 rgba(0,0,0,0.2);
+        }
+
+        button:active {
+            transform: translateY(4px);
+            box-shadow: none;
+        }
+
+        .btn-play { background: #2ecc71; color: white; }
+        .btn-reset { background: #e74c3c; color: white; }
+
+        .footer {
+            margin-top: 15px;
+            font-size: 0.8rem;
+            color: #888;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <canvas id="sholatCanvas" width="500" height="450"></canvas>
+    
+    <div class="ui-panel">
+        <h2 id="stepTitle">1. Berdiri Tegak</h2>
+        <p id="stepDesc">Berdiri lurus menghadap kiblat dengan niat di dalam hati.</p>
+        
+        <div class="btn-group">
+            <button class="btn-play" id="playBtn">Mulai Belajar</button>
+            <button class="btn-reset" id="resetBtn">Ulangi</button>
+        </div>
+        
+        <div class="footer">Disimulasikan oleh: Dicky Nofyan Hidayat, S.T., Gr.</div>
+    </div>
+</div>
+
+<script>
+    const canvas = document.getElementById('sholatCanvas');
+    const ctx = canvas.getContext('2d');
+    const stepTitle = document.getElementById('stepTitle');
+    const stepDesc = document.getElementById('stepDesc');
+    const playBtn = document.getElementById('playBtn');
+    const resetBtn = document.getElementById('resetBtn');
+
+    // State Animasi
+    let isPlaying = false;
+    let currentStepIdx = 0;
+    let progress = 0;
+    const SPEED = 0.04;
+
+    // Definisi Pose (Sudut dalam Radian)
+    // Format: [PinggulY, Badan, Kepala, LenganAtas, LenganBawah, Paha, Betis]
+    const POSES = [
+        { 
+            n: "1. Berdiri Tegak", 
+            d: "Berdiri lurus menghadap kiblat dengan niat di dalam hati.", 
+            vals: [320, 0, 0, -0.2, -2.8, 0, 0] 
+        },
+        { 
+            n: "2. Takbiratul Ihram", 
+            d: "Mengangkat kedua tangan sejajar telinga sambil membaca Allahu Akbar.", 
+            vals: [320, 0, 0, -2.5, -0.5, 0, 0] 
+        },
+        { 
+            n: "3. Sedekap (Qiyam)", 
+            d: "Meletakkan tangan kanan di atas tangan kiri di dada/pusar.", 
+            vals: [320, 0, 0.1, -0.5, -1.8, 0, 0] 
+        },
+        { 
+            n: "4. Rukuk", 
+            d: "Membungkukkan badan hingga punggung rata, tangan memegang lutut.", 
+            vals: [320, 1.4, 1.4, 1.2, -0.5, 0, 0] 
+        },
+        { 
+            n: "5. I'tidal", 
+            d: "Kembali berdiri tegak dari rukuk (Sami'allahu liman hamidah).", 
+            vals: [320, 0, 0, -0.2, -2.8, 0, 0] 
+        },
+        { 
+            n: "6. Sujud", 
+            d: "Menempatkan dahi, hidung, tangan, lutut, dan ujung kaki di lantai.", 
+            vals: [390, 1.6, 2.5, 1.8, -1.5, -1.5, 2.8] 
+        },
+        { 
+            n: "7. Duduk", 
+            d: "Duduk di antara dua sujud (Iftirosy), tangan di atas paha.", 
+            vals: [370, 0.1, 0.2, -0.2, -0.5, -1.8, 2.8] 
+        }
+    ];
+
+    // Fungsi Menggambar Karakter Gaya Kartun Buku
+    function drawCharacter(poseVals) {
+        const [hipY, torso, head, armS, armE, legH, legK] = poseVals;
+        const cx = 250; // Center X
+        
+        ctx.lineCap = 'round';
+        ctx.lineJoin = 'round';
+
+        // Helper function untuk menggambar limb dengan outline tebal
+        function drawLimb(x, y, len, angle, width, fillColor) {
+            const ex = x + Math.sin(angle) * len;
+            const ey = y + Math.cos(angle) * len;
+            
+            // Outline Hitam
+            ctx.beginPath(); ctx.moveTo(x, y); ctx.lineTo(ex, ey);
+            ctx.lineWidth = width + 6; ctx.strokeStyle = '#2c3e50'; ctx.stroke();
+            
+            // Isi Warna
+            ctx.beginPath(); ctx.moveTo(x, y); ctx.lineTo(ex, ey);
+            ctx.lineWidth = width; ctx.strokeStyle = fillColor; ctx.stroke();
+            
+            return {x: ex, y: ey};
+        }
+
+        // 1. KAKI & SARUNG (Hijau)
+        // Paha
+        const knee = drawLimb(cx, hipY, 60, legH, 26, '#27ae60');
+        // Betis
+        const foot = drawLimb(knee.x, knee.y, 55, legH + legK, 22, '#27ae60');
+        
+        // Telapak Kaki (Kulit)
+        ctx.beginPath(); ctx.arc(foot.x + 10, foot.y + 5, 12, 0, Math.PI*2);
+        ctx.fillStyle = '#f1c27d'; ctx.fill();
+        ctx.lineWidth = 4; ctx.strokeStyle = '#2c3e50'; ctx.stroke();
+
+        // 2. BADAN & BAJU (Biru)
+        const shoulder = drawLimb(cx, hipY, 75, torso, 42, '#3498db');
+        
+        // Detail Kerah Baju
+        ctx.save();
+        ctx.translate(shoulder.x, shoulder.y);
+        ctx.rotate(torso);
+        ctx.fillStyle = '#2980b9';
+        ctx.beginPath(); ctx.moveTo(-12, -12); ctx.lineTo(12, -12); ctx.lineTo(0, 8); ctx.fill();
+        ctx.restore();
+
+        // 3. KEPALA & WAJAH
+        const neckBase = { x: shoulder.x + Math.sin(torso)*18, y: shoulder.y + Math.cos(torso)*18 };
+        const headC = { x: neckBase.x + Math.sin(head)*22, y: neckBase.y + Math.cos(head)*22 };
+
+        // Leher
+        drawLimb(neckBase.x, neckBase.y, 12, head, 14, '#f1c27d');
+
+        ctx.save();
+        ctx.translate(headC.x, headC.y);
+        ctx.rotate(head);
+
+        // Wajah Bulat (Outline Tebal)
+        ctx.beginPath(); ctx.arc(0, 0, 28, 0, Math.PI*2);
+        ctx.fillStyle = '#f1c27d'; ctx.fill();
+        ctx.lineWidth = 4; ctx.strokeStyle = '#2c3e50'; ctx.stroke();
+
+        // Mata (Gaya Kartun Anak)
+        ctx.fillStyle = '#2c3e50';
+        ctx.beginPath(); ctx.arc(10, -5, 3, 0, Math.PI*2); ctx.fill(); // Mata kanan
+        ctx.beginPath(); ctx.arc(-2, -5, 3, 0, Math.PI*2); ctx.fill(); // Mata kiri (profil sedikit)
+        
+        // Senyum
+        ctx.beginPath(); ctx.arc(5, 8, 6, 0.2, Math.PI-0.2);
+        ctx.lineWidth = 2; ctx.strokeStyle = '#2c3e50'; ctx.stroke();
+
+        // Peci Merah
+        ctx.beginPath();
+        ctx.moveTo(-28, -5);
+        ctx.quadraticCurveTo(-30, -35, 0, -38);
+        ctx.quadraticCurveTo(30, -35, 28, -5);
+        ctx.fillStyle = '#e74c3c'; ctx.fill();
+        ctx.lineWidth = 4; ctx.strokeStyle = '#2c3e50'; ctx.stroke();
+
+        ctx.restore();
+
+        // 4. LENGAN (Baju Biru)
+        const elbow = drawLimb(shoulder.x, shoulder.y, 45, torso + armS, 18, '#3498db');
+        const hand = drawLimb(elbow.x, elbow.y, 40, torso + armS + armE, 14, '#f1c27d');
+        
+        // Tangan Mengepal/Sedekap
+        ctx.beginPath(); ctx.arc(hand.x, hand.y, 7, 0, Math.PI*2);
+        ctx.fillStyle = '#f1c27d'; ctx.fill();
+        ctx.lineWidth = 4; ctx.strokeStyle = '#2c3e50'; ctx.stroke();
+    }
+
+    // Logika Interpolasi (Tweening)
+    function lerp(s, e, t) { return s + (e - s) * t; }
+    
+    function getInterpolatedPose(idx, t) {
+        if (idx >= POSES.length - 1) return POSES[POSES.length - 1].vals;
+        const s = POSES[idx].vals;
+        const e = POSES[idx + 1].vals;
+        return s.map((val, i) => lerp(val, e[i], t));
+    }
+
+    function animate() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        
+        let currentPoseVals;
+        
+        if (isPlaying && currentStepIdx < POSES.length - 1) {
+            progress += SPEED;
+            if (progress >= 1) {
+                progress = 0;
+                currentStepIdx++;
+                stepTitle.innerText = POSES[currentStepIdx].n;
+                stepDesc.innerText = POSES[currentStepIdx].d;
+                if (currentStepIdx === POSES.length - 1) {
+                    isPlaying = false;
+                    playBtn.innerText = "Selesai";
+                }
+            }
+            currentPoseVals = getInterpolatedPose(currentStepIdx, progress);
+        } else {
+            currentPoseVals = POSES[currentStepIdx].vals;
+        }
+
+        drawCharacter(currentPoseVals);
+        
+        if (isPlaying) requestAnimationFrame(animate);
+    }
+
+    // Event Listeners
+    playBtn.addEventListener('click', () => {
+        if (!isPlaying && currentStepIdx < POSES.length - 1) {
+            isPlaying = true;
+            playBtn.innerText = "Sedang Belajar...";
+            animate();
+        }
+    });
+
+    resetBtn.addEventListener('click', () => {
+        isPlaying = false;
+        currentStepIdx = 0;
+        progress = 0;
+        playBtn.innerText = "Mulai Belajar";
+        stepTitle.innerText = POSES[0].n;
+        stepDesc.innerText = POSES[0].d;
+        animate(); // Redraw static
+    });
+
+    // Initial Draw
+    animate();
+
+</script>
+</body>
+</html>
