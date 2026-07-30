@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simulasi Titrasi Asam-Basa - DickyNH</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f0f2f5;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+            color: #333;
+        }
+        h1 { margin-bottom: 5px; color: #2c3e50; }
+        .presenter-tag {
+            font-size: 1em;
+            color: #555;
+            margin-bottom: 20px;
+            font-weight: 600;
+            border-bottom: 2px solid #e74c3c;
+            padding-bottom: 5px;
+        }
+        .container {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            max-width: 900px;
+            width: 100%;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            position: relative;
+        }
+        canvas {
+            background-color: #fff;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+        }
+        #labCanvas { flex: 1; min-width: 300px; height: 400px; cursor: pointer; }
+        #graphCanvas { flex: 1; min-width: 300px; height: 400px; }
+        
+        .controls {
+            width: 100%;
+            padding: 15px;
+            background: #ecf0f1;
+            border-radius: 8px;
+            margin-top: 10px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+        }
+        .control-group label { display: block; font-weight: bold; margin-bottom: 5px; font-size: 0.9em; }
+        input[type="number"] { width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; }
+        
+        .buttons { display: flex; gap: 10px; margin-top: 10px; }
+        button {
+            padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer; font-weight: bold; flex: 1;
+        }
+        #addDropBtn { background-color: #3498db; color: white; }
+        #resetBtn { background-color: #e74c3c; color: white; }
+
+        .info-panel {
+            width: 100%;
+            display: flex;
+            justify-content: space-around;
+            margin-top: 10px;
+            font-family: monospace;
+            font-size: 1.1em;
+        }
+        .watermark {
+            position: absolute;
+            bottom: 10px;
+            right: 20px;
+            font-size: 0.8em;
+            color: rgba(0,0,0,0.1);
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Simulasi Titrasi Asam-Basa</h1>
+    <div class="presenter-tag">Disampaikan oleh Dicky Nofyan Hidayat, ST, Gr</div>
+
+    <div class="container">
+        <canvas id="labCanvas"></canvas>
+        <canvas id="graphCanvas"></canvas>
+
+        <div class="controls">
+            <div class="control-group">
+                <label>Konsentrasi Asam (Analit) [M]:</label>
+                <input type="number" id="acidConc" value="0.1" step="0.01">
+            </div>
+            <div class="control-group">
+                <label>Volume Asam Awal [mL]:</label>
+                <input type="number" id="acidVol" value="25" step="1">
+            </div>
+            <div class="control-group">
+                <label>Konsentrasi Basa (Titrant) [M]:</label>
+                <input type="number" id="baseConc" value="0.1" step="0.01">
+            </div>
+            <div class="buttons">
+                <button id="addDropBtn">Tambah Tetesan (Titrasi)</button>
+                <button id="resetBtn">Reset Ulang</button>
+            </div>
+        </div>
+
+        <div class="info-panel">
+            <div>pH Saat Ini: <span id="phVal">1.00</span></div>
+            <div>Volume Basa: <span id="volBaseVal">0.00</span> mL</div>
+            <div>Status: <span id="statusVal">Asam Kuat</span></div>
+        </div>
+        <div class="watermark">Dicky Nofyan Hidayat, ST, Gr</div>
+    </div>
+
+    <script>
+        const labCanvas = document.getElementById('labCanvas');
+        const labCtx = labCanvas.getContext('2d');
+        const graphCanvas = document.getElementById('graphCanvas');
+        const graphCtx = graphCanvas.getContext('2d');
+
+        // Variabel Kimia
+        let acidConc = 0.1;
+        let acidVol = 25;
+        let baseConc = 0.1;
+        let addedBaseVol = 0;
+        let ph = 1;
+        let titrationData = [];
+
+        // Konfigurasi Visual
+        function resize() {
+            labCanvas.width = labCanvas.clientWidth;
+            labCanvas.height = labCanvas.clientHeight;
+            graphCanvas.width = graphCanvas.clientWidth;
+            graphCanvas.height = graphCanvas.clientHeight;
+            drawLab();
+            drawGraph();
+        }
+        window.addEventListener('resize', resize);
+
+        function calculatePH() {
+            // Asumsi Asam Kuat (HCl) dan Basa Kuat (NaOH)
+            let molAcid = acidConc * acidVol;
+            let molBase = baseConc * addedBaseVol;
+            let totalVol = acidVol + addedBaseVol;
+            
+            let excessMol = molAcid - molBase;
+            
+            if (excessMol > 0) {
+                // Masih Asam
+                let hConc = excessMol / totalVol;
+                ph = -Math.log10(hConc);
+            } else if (excessMol < 0) {
+                // Sudah Basa
+                let ohConc = Math.abs(excessMol) / totalVol;
+                let poh = -Math.log10(ohConc);
+                ph = 14 - poh;
+            } else {
+                // Ekuivalen (Netral)
+                ph = 7;
+            }
+        }
+
+        function getPhenolphthaleinColor(phValue) {
+            // PP: Bening (pH < 8.2) -> Merah Muda (pH > 10)
+            if (phValue < 8.2) return "rgba(255, 255, 255, 0.3)"; // Bening/Air
+            if (phValue > 10) return "rgba(255, 0, 128, 0.6)"; // Merah Magenta
+            
+            // Transisi
+            let ratio = (phValue - 8.2) / (10 - 8.2);
+            return `rgba(255, ${255 * (1-ratio)}, ${128 * ratio + 127 * (1-ratio)}, ${0.3 + 0.3 * ratio})`;
+        }
+
+        function drawLab() {
+            labCtx.clearRect(0, 0, labCanvas.width, labCanvas.height);
+            const cx = labCanvas.width / 2;
+            const cy = labCanvas.height;
+
+            // 1. Statif (Sederhana)
+            labCtx.fillStyle = "#7f8c8d";
+            labCtx.fillRect(cx - 100, cy - 20, 200, 10); // Alas
+            labCtx.fillRect(cx - 90, cy - 250, 10, 240); // Tiang
+
+            // 2. Erlenmeyer
+            labCtx.strokeStyle = "#bdc3c7";
+            labCtx.lineWidth = 3;
+            labCtx.beginPath();
+            labCtx.moveTo(cx - 40, cy - 50);
+            labCtx.lineTo(cx - 20, cy - 150); // Leher kiri
+            labCtx.lineTo(cx + 20, cy - 150); // Leher kanan
+            labCtx.lineTo(cx + 40, cy - 50);
+            labCtx.closePath();
+            labCtx.stroke();
+
+            // Cairan di Erlenmeyer
+            let liquidHeight = 100 + (addedBaseVol * 0.5); // Sedikit naik
+            labCtx.fillStyle = getPhenolphthaleinColor(ph);
+            labCtx.beginPath();
+            labCtx.moveTo(cx - 38, cy - 52);
+            labCtx.lineTo(cx - 19, cy - 150 + (150 - liquidHeight));
+            labCtx.lineTo(cx + 19, cy - 150 + (150 - liquidHeight));
+            labCtx.lineTo(cx + 38, cy - 52);
+            labCtx.fill();
+
+            // 3. Buret
+            labCtx.strokeStyle = "#bdc3c7";
+            labCtx.beginPath();
+            labCtx.moveTo(cx - 10, cy - 250);
+            labCtx.lineTo(cx - 10, cy - 100);
+            labCtx.moveTo(cx + 10, cy - 250);
+            labCtx.lineTo(cx + 10, cy - 100);
+            labCtx.stroke();
+            
+            // Cairan di Buret (Basa)
+            let buretFill = 200 - (addedBaseVol * 2); 
+            if (buretFill < 0) buretFill = 0;
+            labCtx.fillStyle = "rgba(255, 255, 255, 0.5)";
+            labCtx.fillRect(cx - 9, cy - 248, 18, buretFill);
+
+            // Tetesan (Animasi sederhana)
+            if (addedBaseVol > 0 && addedBaseVol % 0.5 === 0) {
+                labCtx.fillStyle = "rgba(255, 255, 255, 0.8)";
+                labCtx.beginPath();
+                labCtx.arc(cx, cy - 95, 3, 0, Math.PI*2);
+                labCtx.fill();
+            }
+        }
+
+        function drawGraph() {
+            graphCtx.clearRect(0, 0, graphCanvas.width, graphCanvas.height);
+            const padding = 40;
+            const w = graphCanvas.width - padding * 2;
+            const h = graphCanvas.height - padding * 2;
+
+            // Sumbu
+            graphCtx.strokeStyle = "#333";
+            graphCtx.beginPath();
+            graphCtx.moveTo(padding, padding);
+            graphCtx.lineTo(padding, graphCanvas.height - padding);
+            graphCtx.lineTo(graphCanvas.width - padding, graphCanvas.height - padding);
+            graphCtx.stroke();
+
+            // Label
+            graphCtx.fillText("Volume Basa (mL)", graphCanvas.width/2, graphCanvas.height - 10);
+            graphCtx.save();
+            graphCtx.translate(15, graphCanvas.height/2);
+            graphCtx.rotate(-Math.PI/2);
+            graphCtx.fillText("pH", 0, 0);
+            graphCtx.restore();
+
+            // Plot Data
+            if (titrationData.length > 0) {
+                graphCtx.strokeStyle = "#e74c3c";
+                graphCtx.lineWidth = 2;
+                graphCtx.beginPath();
+                
+                let maxVol = Math.max(50, addedBaseVol + 10);
+                
+                titrationData.forEach((point, i) => {
+                    let x = padding + (point.v / maxVol) * w;
+                    let y = (graphCanvas.height - padding) - (point.ph / 14) * h;
+                    if (i===0) graphCtx.moveTo(x, y);
+                    else graphCtx.lineTo(x, y);
+                });
+                graphCtx.stroke();
+            }
+        }
+
+        function updateSimulation() {
+            calculatePH();
+            titrationData.push({v: addedBaseVol, ph: ph});
+            
+            document.getElementById('phVal').innerText = ph.toFixed(2);
+            document.getElementById('volBaseVal').innerText = addedBaseVol.toFixed(2);
+            
+            let status = "Asam";
+            if (ph > 7) status = "Basa";
+            if (Math.abs(ph - 7) < 0.5) status = "Ekuivalen (Netral)";
+            document.getElementById('statusVal').innerText = status;
+
+            drawLab();
+            drawGraph();
+        }
+
+        document.getElementById('addDropBtn').addEventListener('click', () => {
+            addedBaseVol += 0.5; // Tambah 0.5 mL per klik
+            updateSimulation();
+        });
+
+        document.getElementById('resetBtn').addEventListener('click', () => {
+            addedBaseVol = 0;
+            titrationData = [];
+            acidConc = parseFloat(document.getElementById('acidConc').value);
+            acidVol = parseFloat(document.getElementById('acidVol').value);
+            baseConc = parseFloat(document.getElementById('baseConc').value);
+            updateSimulation();
+        });
+
+        // Init
+        resize();
+        updateSimulation();
+    </script>
+</body>
+</html>
