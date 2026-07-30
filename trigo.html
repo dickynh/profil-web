@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simulasi Trigonometri - DickyNH</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f7f6;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+            color: #333;
+        }
+        h1 { 
+            margin-bottom: 5px; 
+            color: #2c3e50; 
+        }
+        .presenter-tag {
+            font-size: 1.1em;
+            color: #555;
+            margin-bottom: 20px;
+            font-weight: 600;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+        .container {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            max-width: 800px;
+            width: 100%;
+            text-align: center;
+            position: relative;
+        }
+        canvas {
+            border: 1px solid #eee;
+            background-color: #fff;
+            margin: 15px 0;
+            cursor: crosshair;
+            border-radius: 8px;
+            box-shadow: inset 0 0 20px rgba(0,0,0,0.02);
+        }
+        .controls {
+            margin: 20px 0;
+            padding: 15px;
+            background: #ecf0f1;
+            border-radius: 8px;
+        }
+        input[type="range"] {
+            width: 100%;
+            cursor: pointer;
+        }
+        .data-display {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 10px;
+            margin-top: 15px;
+        }
+        .card {
+            background: #fff;
+            padding: 10px;
+            border-radius: 6px;
+            border-left: 5px solid #ccc;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+        .card.sin { border-color: #e74c3c; }
+        .card.cos { border-color: #3498db; }
+        .card.tan { border-color: #27ae60; }
+        
+        .value { font-size: 1.2em; font-weight: bold; font-family: monospace; }
+        .label { font-size: 0.9em; color: #7f8c8d; }
+        
+        /* Watermark di dalam container */
+        .watermark {
+            position: absolute;
+            bottom: 10px;
+            right: 15px;
+            font-size: 0.8em;
+            color: #bdc3c7;
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Visualisasi Trigonometri</h1>
+    <!-- Identitas Presenter -->
+    <div class="presenter-tag">Disampaikan oleh Dicky NH</div>
+    
+    <div class="container">
+        <p>Geser slider atau klik pada canvas untuk mengubah sudut.</p>
+        
+        <canvas id="trigCanvas" width="600" height="400"></canvas>
+        
+        <div class="controls">
+            <label for="angleSlider">Sudut ($\theta$): <span id="angleVal">45</span>°</label>
+            <input type="range" id="angleSlider" min="0" max="360" value="45" step="1">
+        </div>
+
+        <div class="data-display">
+            <div class="card sin">
+                <div class="label">Sinus ($\sin \theta$)</div>
+                <div class="value" id="valSin">0.707</div>
+                <div class="label">Sisi Depan / Miring</div>
+            </div>
+            <div class="card cos">
+                <div class="label">Cosinus ($\cos \theta$)</div>
+                <div class="value" id="valCos">0.707</div>
+                <div class="label">Sisi Samping / Miring</div>
+            </div>
+            <div class="card tan">
+                <div class="label">Tangen ($\tan \theta$)</div>
+                <div class="value" id="valTan">1.000</div>
+                <div class="label">Depan / Samping</div>
+            </div>
+        </div>
+
+        <!-- Watermark Tambahan -->
+        <div class="watermark">Powered by DQLinax</div>
+    </div>
+
+    <script>
+        const canvas = document.getElementById('trigCanvas');
+        const ctx = canvas.getContext('2d');
+        const slider = document.getElementById('angleSlider');
+        const angleDisplay = document.getElementById('angleVal');
+        
+        // Elemen tampilan nilai
+        const valSin = document.getElementById('valSin');
+        const valCos = document.getElementById('valCos');
+        const valTan = document.getElementById('valTan');
+
+        // Konfigurasi Visual
+        const centerX = 200; 
+        const centerY = 200;
+        const radius = 120; 
+        
+        let angleDeg = 45;
+
+        function toRad(deg) {
+            return deg * (Math.PI / 180);
+        }
+
+        function draw() {
+            // Bersihkan canvas
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            const rad = toRad(angleDeg);
+            const cosVal = Math.cos(rad);
+            const sinVal = Math.sin(rad);
+            const tanVal = Math.tan(rad);
+
+            const pointX = centerX + (radius * cosVal);
+            const pointY = centerY - (radius * sinVal);
+
+            // 1. Gambar Sumbu Kartesius
+            ctx.strokeStyle = '#ddd';
+            ctx.lineWidth = 1;
+            ctx.beginPath();
+            ctx.moveTo(0, centerY); ctx.lineTo(canvas.width, centerY); 
+            ctx.moveTo(centerX, 0); ctx.lineTo(centerX, canvas.height); 
+            ctx.stroke();
+
+            // 2. Gambar Lingkaran Satuan
+            ctx.strokeStyle = '#2c3e50';
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            ctx.arc(centerX, centerY, radius, 0, Math.PI * 2);
+            ctx.stroke();
+
+            // 3. Garis Sudut (Hipotenusa)
+            ctx.strokeStyle = '#333';
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            ctx.moveTo(centerX, centerY);
+            ctx.lineTo(pointX, pointY);
+            ctx.stroke();
+
+            // 4. Cosinus (Biru)
+            ctx.strokeStyle = '#3498db';
+            ctx.lineWidth = 4;
+            ctx.beginPath();
+            ctx.moveTo(centerX, centerY);
+            ctx.lineTo(pointX, centerY);
+            ctx.stroke();
+
+            // 5. Sinus (Merah)
+            ctx.strokeStyle = '#e74c3c';
+            ctx.lineWidth = 4;
+            ctx.beginPath();
+            ctx.moveTo(pointX, centerY);
+            ctx.lineTo(pointX, pointY);
+            ctx.stroke();
+
+            // 6. Tangen (Hijau)
+            if (Math.abs(cosVal) > 0.05) {
+                const tanLineY = centerY - (radius * tanVal);
+                const tanStartX = centerX + radius; 
+                
+                ctx.strokeStyle = '#27ae60';
+                ctx.lineWidth = 3;
+                ctx.setLineDash([5, 5]); 
+                ctx.beginPath();
+                ctx.moveTo(tanStartX, centerY); 
+                ctx.lineTo(tanStartX, tanLineY); 
+                ctx.stroke();
+                
+                ctx.beginPath();
+                ctx.moveTo(centerX, centerY);
+                ctx.lineTo(tanStartX, tanLineY);
+                ctx.stroke();
+                ctx.setLineDash([]); 
+            }
+
+            // 7. Busur Sudut
+            ctx.fillStyle = 'rgba(255, 255, 0, 0.3)';
+            ctx.beginPath();
+            ctx.moveTo(centerX, centerY);
+            ctx.arc(centerX, centerY, 30, 0, -rad, true); 
+            ctx.fill();
+            
+            // Teks Sudut
+            ctx.fillStyle = '#333';
+            ctx.font = 'bold 14px Arial';
+            ctx.fillText(`${angleDeg}°`, centerX + 40, centerY - 10);
+
+            // Label Sumbu
+            ctx.font = '12px Arial';
+            ctx.fillStyle = '#7f8c8d';
+            ctx.fillText("Sumbu X (Cos)", canvas.width - 80, centerY + 20);
+            ctx.fillText("Sumbu Y (Sin)", centerX + 10, 20);
+
+            updateData(sinVal, cosVal, tanVal);
+        }
+
+        function updateData(s, c, t) {
+            valSin.innerText = s.toFixed(3);
+            valCos.innerText = c.toFixed(3);
+            valTan.innerText = Math.abs(c) < 0.001 ? "Infinity" : t.toFixed(3);
+            angleDisplay.innerText = angleDeg;
+        }
+
+        // Event Listeners
+        slider.addEventListener('input', (e) => {
+            angleDeg = parseInt(e.target.value);
+            draw();
+        });
+
+        canvas.addEventListener('mousedown', (e) => {
+            const rect = canvas.getBoundingClientRect();
+            const mouseX = e.clientX - rect.left;
+            const mouseY = e.clientY - rect.top;
+
+            const dx = mouseX - centerX;
+            const dy = centerY - mouseY; 
+            
+            let rad = Math.atan2(dy, dx);
+            let deg = rad * (180 / Math.PI);
+            
+            if (deg < 0) deg += 360;
+
+            angleDeg = Math.round(deg);
+            slider.value = angleDeg;
+            draw();
+        });
+
+        let isAnimating = false;
+        function animate() {
+            if (!isAnimating) return;
+            angleDeg = (angleDeg + 1) % 361;
+            slider.value = angleDeg;
+            draw();
+            requestAnimationFrame(animate);
+        }
+
+        canvas.addEventListener('dblclick', () => {
+            isAnimating = !isAnimating;
+            if (isAnimating) animate();
+        });
+
+        // Gambar awal
+        draw();
+
+    </script>
+</body>
+</html>
