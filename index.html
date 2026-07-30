@@ -152,8 +152,33 @@
             }
         }
 
+        /* --- CUSTOM VISITOR COUNTER STYLE --- */
+        .visitor-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 16px;
+            background: rgba(0, 212, 255, 0.05);
+            border: 1px solid rgba(0, 212, 255, 0.2);
+            border-radius: 20px;
+            font-size: 0.75rem;
+            color: #aaa;
+            margin-top: 15px;
+            transition: all 0.3s ease;
+        }
+        .visitor-badge:hover {
+            border-color: rgba(0, 212, 255, 0.5);
+            background: rgba(0, 212, 255, 0.1);
+        }
+        #visit-counter {
+            color: #00d4ff;
+            font-weight: bold;
+            min-width: 20px;
+            display: inline-block;
+        }
+
         /* --- FOOTER --- */
-        footer { text-align: center; padding: 20px; background: #111; color: #777; font-size: 0.9rem; position: relative; z-index: 2; }
+        footer { text-align: center; padding: 30px 20px; background: #111; color: #777; font-size: 0.9rem; position: relative; z-index: 2; }
 
         /* --- ANIMATIONS KEYFRAMES --- */
         @keyframes fadeInDown { from { opacity: 0; transform: translateY(-30px); } to { opacity: 1; transform: translateY(0); } }
@@ -210,7 +235,7 @@
         <h2>Tentang Saya</h2>
         <div class="card-container">
             <div class="card scroll-element"><h3>🎨 Desain</h3><p>Fokus pada UI/UX yang bersih dan modern agar pengguna nyaman.</p></div>
-            <div class="card scroll-element"><h3>💻 Coding</h3><p>Menguasai HTML, CSS, JavaScript, dan framework modern.</p></div>
+            <div class="card scroll-element"><h3> Coding</h3><p>Menguasai HTML, CSS, JavaScript, dan framework modern.</p></div>
             <div class="card scroll-element"><h3>🚀 Performa</h3><p>Memastikan website cepat diakses dan ringan di semua perangkat.</p></div>
         </div>
     </section>
@@ -231,7 +256,7 @@
 
             <!-- Platform UMKM Digital -->
             <div class="card scroll-element">
-                <h3>🛍️ Platform UMKM Digital</h3>
+                <h3>️ Platform UMKM Digital</h3>
                 <p>Pembuatan toko online dan sistem manajemen pesanan khusus UMKM.</p>
                 <div class="card-buttons">
                     <a href="https://wa.me/628212680190?text=Halo%20Pak%20Dicky,%20saya%20tertarik%20dengan%20Platform%20UMKM%20Digital" target="_blank" class="app-link-btn">Tanya Detail →</a>
@@ -244,9 +269,8 @@
                 <p>Konversi materi pelajaran menjadi konten digital interaktif & infografis.</p>
                 <div class="card-buttons">
                     <a href="https://wa.me/628212680190?text=Halo%20Pak%20Dicky,%20saya%20tertarik%20dengan%20Visualisasi%20Bahan%20Ajar" target="_blank" class="app-link-btn">Tanya Detail →</a>
-                    <a href="glbb.html" class="demo-link-btn">🚀 GLBB</a>
-                    <a href="trigo.html" class="demo-link-btn">📐 Trigonometri</a>
-                    <a href="titrasi.html" class="demo-link-btn">⚗️ Simulasi Titrasi</a>
+                    <a href="glbb.html" class="demo-link-btn"> GLBB</a>
+                    <a href="trigo.html" class="demo-link-btn"> Trigonometri</a>
                 </div>
             </div>
 
@@ -261,7 +285,7 @@
 
             <!-- App Development -->
             <div class="card scroll-element">
-                <h3>📱 App Development</h3>
+                <h3> App Development</h3>
                 <p>Pembuatan aplikasi mobile Android/iOS custom sesuai kebutuhan.</p>
                 <div class="card-buttons">
                     <a href="https://wa.me/628212680190?text=Halo%20Pak%20Dicky,%20saya%20tertarik%20dengan%20App%20Development" target="_blank" class="app-link-btn">Tanya Detail →</a>
@@ -280,11 +304,11 @@
             <!-- JadwalKu Guru (BEST SELLER) -->
             <div class="card scroll-element" style="border-color: #ff6b6b;">
                 <span class="badge-bestseller">BEST SELLER 🔥</span>
-                <h3> JadwalKu Guru</h3>
+                <h3>🔔 JadwalKu Guru</h3>
                 <p>Aplikasi pengingat jadwal mengajar otomatis via suara TTS. Setup + Garansi bunyi saat HP terkunci.</p>
                 <div class="card-buttons">
                     <a href="https://wa.me/628212680190?text=Halo%20Pak%20Dicky,%20saya%20mau%20order%20JadwalKu%20Guru" target="_blank" class="app-link-btn" style="background: #ff6b6b; border-color: #ff6b6b; color: white;">Order Sekarang →</a>
-                    <a href="https://dickynh.github.io/jadwal-dqnh-2026/" target="_blank" class="demo-link-btn" style="color: #ff6b6b; border-color: rgba(255, 107, 107, 0.5);"> Demo App</a>
+                    <a href="https://dickynh.github.io/jadwal-dqnh-2026/" target="_blank" class="demo-link-btn" style="color: #ff6b6b; border-color: rgba(255, 107, 107, 0.5);">🚀 Demo App</a>
                 </div>
             </div>
             
@@ -309,7 +333,15 @@
         </div>
     </section>
 
-    <footer><p>&copy; 2026 Pena Informatika by Dicky Nofyan Hidayat.</p></footer>
+    <!-- Footer dengan Visitor Counter -->
+    <footer>
+        <p>&copy; 2026 Pena Informatika by Dicky Nofyan Hidayat.</p>
+        
+        <!-- CUSTOM VISITOR COUNTER -->
+        <div class="visitor-badge">
+            👁️ Total Kunjungan: <span id="visit-counter">...</span>
+        </div>
+    </footer>
 
     <!-- JavaScript Utama -->
     <script>
@@ -364,6 +396,38 @@
         logoImg.onerror = () => { console.log("Logo belum ditemukan, silakan simpan file logopena.png"); };
     </script>
 
+    <!-- === SCRIPT VISITOR COUNTER (UNIQUE VISITOR) === -->
+    <script>
+        // Ganti 'pena-informatika-webprofile' dengan nama unik lain jika ingin reset counter
+        const COUNTER_KEY = 'pena-informatika-webprofile';
+        
+        // Cek apakah visitor baru dalam sesi browser ini
+        const hasVisited = sessionStorage.getItem(COUNTER_KEY);
+        
+        if (!hasVisited) {
+            // Increment counter hanya untuk unique visitor
+            fetch(`https://api.counterapi.dev/v1/${COUNTER_KEY}/up`)
+                .then(res => res.json())
+                .then(data => {
+                    document.getElementById('visit-counter').innerText = data.count.toLocaleString('id-ID');
+                    sessionStorage.setItem(COUNTER_KEY, 'true');
+                })
+                .catch(() => {
+                    document.getElementById('visit-counter').innerText = '-';
+                });
+        } else {
+            // Ambil count tanpa increment untuk visitor yang sudah pernah datang
+            fetch(`https://api.counterapi.dev/v1/${COUNTER_KEY}/get`)
+                .then(res => res.json())
+                .then(data => {
+                    document.getElementById('visit-counter').innerText = data.count.toLocaleString('id-ID');
+                })
+                .catch(() => {
+                    document.getElementById('visit-counter').innerText = '-';
+                });
+        }
+    </script>
+
     <!-- === SCRIPT PROTEKSI TAMBAHAN === -->
     <script>
         document.addEventListener('contextmenu', function(e) {
@@ -379,10 +443,4 @@
         });
 
         document.addEventListener('dragstart', function(e) {
-            e.preventDefault();
-            return false;
-        });
-    </script>
-
-</body>
-</html>
+            e.prev
