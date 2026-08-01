@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SIAP-VOKASI Dashboard</title>
+    <style>
+        body { font-family: sans-serif; margin: 0; background: #f4f6f8; }
+        .header { background: #0056b3; color: white; padding: 15px; text-align: center; }
+        .nav { display: flex; justify-content: space-around; background: white; padding: 10px; border-bottom: 1px solid #ddd; }
+        .nav button { border: none; background: none; font-weight: bold; color: #555; padding: 10px; }
+        .nav button.active { color: #0056b3; border-bottom: 2px solid #0056b3; }
+        .content { padding: 20px; }
+        .card { background: white; padding: 15px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); margin-bottom: 15px; }
+        .stat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+        .stat-box { background: #e3f2fd; padding: 15px; border-radius: 8px; text-align: center; }
+        .stat-num { font-size: 24px; font-weight: bold; color: #0056b3; }
+        .btn-action { width: 100%; padding: 12px; background: #28a745; color: white; border: none; border-radius: 5px; font-size: 16px; margin-top: 10px; }
+        .hidden { display: none; }
+    </style>
+</head>
+<body>
+
+<div class="header">
+    <h2>SIAP-VOKASI</h2>
+    <small>Integrasi BLK & BKK Digital</small>
+</div>
+
+<div class="nav">
+    <button onclick="showTab('blk')" id="btn-blk" class="active">BLK (Pelatihan)</button>
+    <button onclick="showTab('bkk')" id="btn-bkk">BKK (Penempatan)</button>
+</div>
+
+<!-- TAB BLK -->
+<div id="tab-blk" class="content">
+    <div class="stat-grid">
+        <div class="stat-box"><div class="stat-num">12</div><small>Kelas Aktif</small></div>
+        <div class="stat-box"><div class="stat-num">340</div><small>Peserta</small></div>
+    </div>
+    <br>
+    <div class="card">
+        <h3>Jadwal Pelatihan Hari Ini</h3>
+        <p>🛠️ Las Dasar (Ruangan A) - 08:00</p>
+        <p>💻 Web Programming (Lab Komputer) - 10:00</p>
+    </div>
+    <button class="btn-action">Input Absensi Peserta</button>
+    <button class="btn-action" style="background:#17a2b8">Terbitkan Sertifikat Digital</button>
+</div>
+
+<!-- TAB BKK -->
+<div id="tab-bkk" class="content hidden">
+    <div class="stat-grid">
+        <div class="stat-box"><div class="stat-num">85%</div><small>Terserap Kerja</small></div>
+        <div class="stat-box"><div class="stat-num">50</div><small>Lowongan Baru</small></div>
+    </div>
+    <br>
+    <div class="card">
+        <h3>Rekomendasi Penempatan</h3>
+        <p>👤 Budi (Lulusan Las) -> PT Baja Mandiri</p>
+        <p>👤 Siti (Lulusan Admin) -> CV Maju Jaya</p>
+    </div>
+    <button class="btn-action">Matchmaking Alumni</button>
+    <button class="btn-action" style="background:#ffc107; color:black">Lapor Tracer Study</button>
+</div>
+
+<script>
+    function showTab(tabName) {
+        document.getElementById('tab-blk').classList.add('hidden');
+        document.getElementById('tab-bkk').classList.add('hidden');
+        document.getElementById('btn-blk').classList.remove('active');
+        document.getElementById('btn-bkk').classList.remove('active');
+        
+        document.getElementById('tab-' + tabName).classList.remove('hidden');
+        document.getElementById('btn-' + tabName).classList.add('active');
+    }
+</script>
+
+</body>
+</html>
