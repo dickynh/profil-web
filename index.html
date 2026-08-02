@@ -8,7 +8,7 @@
     <style>
         /* --- RESET & BASIC STYLE --- */
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
-        body { background-color: #1a1a1a; color: #f0f0f0; overflow-x: hidden; }
+        body { background-color: #1a1a1a; color: #f0f0f0; overflow-x: hidden; user-select: none; /* Mencegah seleksi via CSS */ -webkit-user-select: none; -moz-user-select: none; -ms-user-select: none; }
         a { text-decoration: none; color: inherit; }
 
         /* --- HEADER / NAVBAR --- */
@@ -45,7 +45,7 @@
             opacity: 0; animation: zoomIn 1s forwards;
             position: relative; z-index: 2;
         }
-        .profile-img { width: 100%; height: 100%; object-fit: cover; }
+        .profile-img { width: 100%; height: 100%; object-fit: cover; pointer-events: none; /* Mencegah drag gambar */ }
 
         .hero h1 { font-size: 2.5rem; margin-bottom: 10px; opacity: 0; animation: fadeInDown 1s 0.3s forwards; position: relative; z-index: 2; }
         .hero p { font-size: 1.1rem; color: #aaa; max-width: 600px; margin-bottom: 30px; opacity: 0; animation: fadeInUp 1s 0.6s forwards; position: relative; z-index: 2; }
@@ -119,6 +119,16 @@
             box-shadow: 0 0 15px rgba(0, 212, 255, 0.4);
             transform: translateY(-2px);
         }
+        /* Style khusus untuk tombol Order Best Seller */
+        .app-link-btn.order-best {
+            background: #ff6b6b;
+            border-color: #ff6b6b;
+            color: white;
+        }
+        .app-link-btn.order-best:hover {
+            background: #ff5252;
+            box-shadow: 0 0 15px rgba(255, 107, 107, 0.4);
+        }
 
         /* Tombol Demo App - Seragam & Rapi */
         .demo-link-btn {
@@ -144,37 +154,22 @@
             box-shadow: 0 0 12px rgba(0, 212, 255, 0.2);
             transform: translateY(-2px);
         }
+        /* Style khusus demo best seller */
+        .demo-link-btn.demo-best {
+            color: #ff6b6b;
+            border-color: rgba(255, 107, 107, 0.5);
+        }
+        .demo-link-btn.demo-best:hover {
+            background: rgba(255, 107, 107, 0.15);
+            border-color: #ff6b6b;
+            box-shadow: 0 0 12px rgba(255, 107, 107, 0.2);
+        }
 
         /* Responsif HP Sangat Kecil */
         @media (max-width: 380px) {
             .card-buttons {
                 grid-template-columns: 1fr; 
             }
-        }
-
-        /* --- CUSTOM VISITOR COUNTER STYLE --- */
-        .visitor-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            padding: 8px 16px;
-            background: rgba(0, 212, 255, 0.05);
-            border: 1px solid rgba(0, 212, 255, 0.2);
-            border-radius: 20px;
-            font-size: 0.75rem;
-            color: #aaa;
-            margin-top: 15px;
-            transition: all 0.3s ease;
-        }
-        .visitor-badge:hover {
-            border-color: rgba(0, 212, 255, 0.5);
-            background: rgba(0, 212, 255, 0.1);
-        }
-        #visit-counter {
-            color: #00d4ff;
-            font-weight: bold;
-            min-width: 20px;
-            display: inline-block;
         }
 
         /* --- FOOTER --- */
@@ -195,7 +190,7 @@
         }
     </style>
 </head>
-<body>
+<body oncontextmenu="return false;">
 
     <!-- Canvas untuk Animasi Branding -->
     <canvas id="brandCanvas"></canvas>
@@ -263,7 +258,7 @@
                 </div>
             </div>
 
-            <!-- Visualisasi Bahan Ajar (SUDAH DIRAPIHKAN DENGAN GRID) -->
+            <!-- Visualisasi Bahan Ajar -->
             <div class="card scroll-element">
                 <h3> Visualisasi Bahan Ajar</h3>
                 <p>Konversi materi pelajaran menjadi konten digital interaktif & infografis.</p>
@@ -307,8 +302,8 @@
                 <h3>🔔 JadwalKu Guru</h3>
                 <p>Aplikasi pengingat jadwal mengajar otomatis via suara TTS. Setup + Garansi bunyi saat HP terkunci.</p>
                 <div class="card-buttons">
-                    <a href="https://wa.me/628212680190?text=Halo%20Pak%20Dicky,%20saya%20mau%20order%20JadwalKu%20Guru" target="_blank" class="app-link-btn" style="background: #ff6b6b; border-color: #ff6b6b; color: white;">Order Sekarang →</a>
-                    <a href="https://dickynh.github.io/jadwal-dqnh-2026/" target="_blank" class="demo-link-btn" style="color: #ff6b6b; border-color: rgba(255, 107, 107, 0.5);">🚀 Demo App</a>
+                    <a href="https://wa.me/628212680190?text=Halo%20Pak%20Dicky,%20saya%20mau%20order%20JadwalKu%20Guru" target="_blank" class="app-link-btn order-best">Order Sekarang →</a>
+                    <a href="https://dickynh.github.io/jadwal-dqnh-2026/" target="_blank" class="demo-link-btn demo-best">🚀 Demo App</a>
                 </div>
             </div>
             
@@ -396,22 +391,40 @@
         logoImg.onerror = () => { console.log("Logo belum ditemukan, silakan simpan file logopena.png"); };
     </script>
 
-
-
-
-    <!-- === SCRIPT PROTEKSI TAMBAHAN === -->
+    <!-- === SCRIPT PROTEKSI TAMBAHAN (LENGKAP) === -->
     <script>
+        // Mencegah Klik Kanan
         document.addEventListener('contextmenu', function(e) {
             e.preventDefault();
-            alert('⚠️ PERINGATAN HAK CIPTA!\n\nHalaman ini merupakan portofolio digital Pena Informatika.\nDilarang keras menyalin, memodifikasi, atau mendistribusikan tanpa izin.');
+            // Opsional: Bisa dihapus alertnya jika terasa mengganggu, cukup preventDefault saja
+            // alert('⚠️ Konten dilindungi Hak Cipta Pena Informatika.');
         });
 
+        // Mencegah Shortcut Keyboard (Ctrl+U, Ctrl+S, F12, dll)
         document.addEventListener('keydown', function(e) {
-            if ((e.ctrlKey && ['u', 's', 'i'].includes(e.key.toLowerCase())) || e.key === 'F12') {
+            if (
+                (e.ctrlKey && (e.key === 'u' || e.key === 'U')) || // View Source
+                (e.ctrlKey && (e.key === 's' || e.key === 'S')) || // Save Page
+                (e.ctrlKey && (e.key === 'i' || e.key === 'I')) || // Inspect
+                (e.ctrlKey && (e.key === 'j' || e.key === 'J')) || // Console
+                (e.ctrlKey && (e.key === 'c' || e.key === 'C')) || // Copy
+                e.key === 'F12' // Developer Tools
+            ) {
                 e.preventDefault();
-                alert('🔒 Fitur developer telah dinonaktifkan demi keamanan konten.');
+                return false;
             }
         });
 
+        // Mencegah Drag Gambar
         document.addEventListener('dragstart', function(e) {
-            e.prev
+            e.preventDefault();
+        });
+
+        // Mencegah Seleksi Teks (Double Check)
+        document.addEventListener('selectstart', function(e) {
+            e.preventDefault();
+        });
+    </script>
+
+</body>
+</html>
