@@ -338,9 +338,12 @@
         <p>&copy; 2026 Pena Informatika by Dicky Nofyan Hidayat.</p>
         
         <!-- CUSTOM VISITOR COUNTER -->
-       <div id="visitor-counter" style="font-size: 0.9rem; color: #666; margin-top: 10px;">
-    👁️ Pengunjung: <span id="visit-count">Memuat...</span>
-       </div> 
+    <!-- === SCRIPT VISITOR COUNTER STABIL (GLITCH.ME) === -->
+<div style="text-align: center; margin-top: 20px;">
+    <span style="font-size: 14px; color: #555;">👁️ Total Pengunjung: </span>
+    <img src="https://profile-counter.glitch.me/pena-informatika/count.svg?" alt="Visitor Count" style="vertical-align: middle; height: 20px;" />
+</div>
+        
     </footer>
 
     <!-- JavaScript Utama -->
@@ -396,26 +399,7 @@
         logoImg.onerror = () => { console.log("Logo belum ditemukan, silakan simpan file logopena.png"); };
     </script>
 
-<!-- === SCRIPT VISITOR COUNTER UNTUK GITHUB PAGES === -->
-<div id="visitor-counter" style="font-size: 0.9rem; color: #666; margin-top: 10px;">
-    👁️ Pengunjung: <span id="visit-count">Memuat...</span>
-</div>
 
-<script>
-    // Ganti 'penainformatika' dengan username GitHub Bapak jika ingin hitungan per user,
-    // atau biarkan nama unik untuk hitungan spesifik website ini.
-    const SITE_NAME = 'pena-informatika-web'; 
-    
-    fetch(`https://api.counterapi.dev/v1/${SITE_NAME}/up`)
-        .then(response => response.json())
-        .then(data => {
-            document.getElementById('visit-count').innerText = data.count.toLocaleString('id-ID');
-        })
-        .catch(error => {
-            console.error('Error fetching counter:', error);
-            document.getElementById('visit-count').innerText = '-';
-        });
-</script>
 
 
     <!-- === SCRIPT PROTEKSI TAMBAHAN === -->
