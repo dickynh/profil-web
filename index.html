@@ -396,37 +396,27 @@
         logoImg.onerror = () => { console.log("Logo belum ditemukan, silakan simpan file logopena.png"); };
     </script>
 
-    <!-- === SCRIPT VISITOR COUNTER (UNIQUE VISITOR) === -->
-    <script>
-        // Ganti 'pena-informatika-webprofile' dengan nama unik lain jika ingin reset counter
-        const COUNTER_KEY = 'pena-informatika-webprofile';
-        
-        // Cek apakah visitor baru dalam sesi browser ini
-        const hasVisited = sessionStorage.getItem(COUNTER_KEY);
-        
-        if (!hasVisited) {
-            // Increment counter hanya untuk unique visitor
-            fetch(`https://api.counterapi.dev/v1/${COUNTER_KEY}/up`)
-                .then(res => res.json())
-                .then(data => {
-                    document.getElementById('visit-counter').innerText = data.count.toLocaleString('id-ID');
-                    sessionStorage.setItem(COUNTER_KEY, 'true');
-                })
-                .catch(() => {
-                    document.getElementById('visit-counter').innerText = '-';
-                });
-        } else {
-            // Ambil count tanpa increment untuk visitor yang sudah pernah datang
-            fetch(`https://api.counterapi.dev/v1/${COUNTER_KEY}/get`)
-                .then(res => res.json())
-                .then(data => {
-                    document.getElementById('visit-counter').innerText = data.count.toLocaleString('id-ID');
-                })
-                .catch(() => {
-                    document.getElementById('visit-counter').innerText = '-';
-                });
-        }
-    </script>
+<!-- === SCRIPT VISITOR COUNTER UNTUK GITHUB PAGES === -->
+<div id="visitor-counter" style="font-size: 0.9rem; color: #666; margin-top: 10px;">
+    👁️ Pengunjung: <span id="visit-count">Memuat...</span>
+</div>
+
+<script>
+    // Ganti 'penainformatika' dengan username GitHub Bapak jika ingin hitungan per user,
+    // atau biarkan nama unik untuk hitungan spesifik website ini.
+    const SITE_NAME = 'pena-informatika-web'; 
+    
+    fetch(`https://api.counterapi.dev/v1/${SITE_NAME}/up`)
+        .then(response => response.json())
+        .then(data => {
+            document.getElementById('visit-count').innerText = data.count.toLocaleString('id-ID');
+        })
+        .catch(error => {
+            console.error('Error fetching counter:', error);
+            document.getElementById('visit-count').innerText = '-';
+        });
+</script>
+
 
     <!-- === SCRIPT PROTEKSI TAMBAHAN === -->
     <script>
