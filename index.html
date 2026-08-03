@@ -8,9 +8,17 @@
     <style>
         /* --- RESET & BASIC STYLE --- */
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
-        body { background-color: #1a1a1a; color: #f0f0f0; overflow-x: hidden; user-select: none; -webkit-user-select: none; -moz-user-select: none; -ms-user-select: none; }
-        a { text-decoration: none; color: inherit; }
-
+        body { 
+    background-color: #1a1a1a; 
+    color: #f0f0f0; 
+    overflow-x: hidden; 
+    user-select: none; 
+    -webkit-user-select: none; 
+    -moz-user-select: none; 
+    -ms-user-select: none; 
+    padding-bottom: 80px; /* <--- TAMBAHKAN BARIS INI */
+        }
+        
         /* --- HEADER / NAVBAR --- */
         header {
             display: flex; justify-content: space-between; align-items: center;
@@ -173,8 +181,15 @@
         }
 
         /* --- FOOTER --- */
-        footer { text-align: center; padding: 30px 20px; background: #111; color: #777; font-size: 0.9rem; position: relative; z-index: 2; }
-
+        footer { 
+    text-align: center; 
+    padding: 30px 20px 60px 20px; /* <--- UBAH ANGKA 20px JADI 60px */
+    background: #111; 
+    color: #777; 
+    font-size: 0.9rem; 
+    position: relative; 
+    z-index: 2; 
+}
         /* --- ANIMATIONS KEYFRAMES --- */
         @keyframes fadeInDown { from { opacity: 0; transform: translateY(-30px); } to { opacity: 1; transform: translateY(0); } }
         @keyframes fadeInUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
