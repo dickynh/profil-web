@@ -188,6 +188,79 @@
             .btn { width: 100%; }
             .logo-text { font-size: 1.2rem; }
         }
+
+        /* === CUSTOM AUDIO PLAYER STYLES === */
+        .audio-player-widget {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: rgba(26, 26, 26, 0.85);
+            backdrop-filter: blur(12px);
+            border-radius: 50px;
+            padding: 10px 20px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            z-index: 1001; /* Di atas canvas dan navbar */
+            border: 1px solid rgba(0, 212, 255, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .player-info {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.8rem;
+            color: #e0e0e0;
+            font-weight: 500;
+        }
+
+        .pulse-icon {
+            animation: pulse 2s infinite;
+            font-size: 1rem;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.5; transform: scale(1.2); }
+        }
+
+        .play-btn {
+            background: linear-gradient(135deg, #00d4ff, #0099cc);
+            border: none;
+            border-radius: 25px;
+            padding: 8px 16px;
+            color: #1a1a1a;
+            font-size: 0.75rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            white-space: nowrap;
+        }
+
+        .play-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 212, 255, 0.4);
+        }
+
+        .play-btn:active {
+            transform: translateY(0);
+        }
+
+        /* Mobile Responsive Audio Player */
+        @media (max-width: 768px) {
+            .audio-player-widget {
+                bottom: 10px;
+                right: 10px;
+                left: 10px;
+                justify-content: space-between;
+                border-radius: 15px;
+                padding: 12px 15px;
+            }
+            .player-label { display: none; } 
+            .play-btn { padding: 8px 12px; font-size: 0.7rem; }
+        }
     </style>
 </head>
 <body oncontextmenu="return false;">
@@ -298,8 +371,8 @@
 
             <!-- JadwalKu Guru (BEST SELLER) -->
             <div class="card scroll-element" style="border-color: #ff6b6b;">
-                <span class="badge-bestseller">BEST SELLER 🔥</span>
-                <h3>🔔 JadwalKu Guru</h3>
+                <span class="badge-bestseller">BEST SELLER </span>
+                <h3> JadwalKu Guru</h3>
                 <p>Aplikasi pengingat jadwal mengajar otomatis via suara TTS. Setup + Garansi bunyi saat HP terkunci.</p>
                 <div class="card-buttons">
                     <a href="https://wa.me/628212680190?text=Halo%20Pak%20Dicky,%20saya%20mau%20order%20JadwalKu%20Guru" target="_blank" class="app-link-btn order-best">Order Sekarang →</a>
@@ -337,6 +410,24 @@
 </div>
      
     </footer>
+
+    <!-- === AUDIO PLAYER WIDGET (TECH EDUCATION THEME) === -->
+    <div class="audio-player-widget">
+        <div class="player-info">
+            <span class="pulse-icon"></span>
+            <span class="player-label">Suasana Belajar & Berkarya</span>
+        </div>
+        
+        <audio id="profileBgm" loop preload="none">
+            <!-- Musik Lo-Fi Tech Education dari Pixabay (Copyright Free) -->
+            <source src="https://cdn.pixabay.com/download/audio/2022/05/27/audio_1808fbf07a.mp3?filename=lofi-study-112191.mp3" type="audio/mpeg">
+            Browser Anda tidak mendukung elemen audio.
+        </audio>
+        
+        <button id="playBtn" class="play-btn" aria-label="Putar Musik Latar">
+            ▶️ Putar Musik
+        </button>
+    </div>
 
     <!-- JavaScript Utama -->
     <script>
@@ -389,6 +480,43 @@
 
         logoImg.onload = () => animateBrand();
         logoImg.onerror = () => { console.log("Logo belum ditemukan, silakan simpan file logopena.png"); };
+
+        // 3. AUDIO PLAYER LOGIC
+        document.addEventListener('DOMContentLoaded', () => {
+            const audio = document.getElementById('profileBgm');
+            const btn = document.getElementById('playBtn');
+            let isPlaying = false;
+
+            // Set volume default rendah agar tidak mengganggu
+            audio.volume = 0.3; 
+
+            btn.addEventListener('click', () => {
+                if (isPlaying) {
+                    audio.pause();
+                    btn.innerHTML = '▶️ Putar Musik';
+                    btn.style.background = 'linear-gradient(135deg, #00d4ff, #0099cc)';
+                    btn.style.color = '#1a1a1a';
+                } else {
+                    audio.play().then(() => {
+                        btn.innerHTML = '⏸️ Jeda Musik';
+                        btn.style.background = 'linear-gradient(135deg, #ff6b6b, #ee5253)';
+                        btn.style.color = '#ffffff';
+                    }).catch(err => {
+                        console.log("Audio play failed:", err);
+                        alert("Silakan klik tombol lagi untuk memutar musik.");
+                    });
+                }
+                isPlaying = !isPlaying;
+            });
+
+            // Reset tombol jika musik selesai (meski sudah di-loop)
+            audio.addEventListener('ended', () => {
+                isPlaying = false;
+                btn.innerHTML = '▶️ Putar Musik';
+                btn.style.background = 'linear-gradient(135deg, #00d4ff, #0099cc)';
+                btn.style.color = '#1a1a1a';
+            });
+        });
     </script>
 
     <!-- === SCRIPT PROTEKSI DENGAN POPUP === -->
