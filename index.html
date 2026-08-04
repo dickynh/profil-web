@@ -461,19 +461,25 @@
         </div>
     </div>
 
-    <!-- === AUDIO PLAYER WIDGET === -->
+    <!-- === AUDIO PLAYER WIDGET DENGAN VISITOR COUNTER === -->
     <div class="audio-player-widget">
+        <!-- Bagian Kiri: Visitor Counter -->
         <div class="visitor-counter-slot">
             <img src="https://visitor-badge.laobi.icu/badge?page_id=dickynh.profil-web" 
                  alt="Total Pengunjung" 
                  style="height: 20px; opacity: 0.9;" 
                  onerror="this.style.display='none'; this.parentElement.innerHTML='<span>👁️ Visitors: Loading...</span>';" />
         </div>
+        
+        <!-- Bagian Kanan: Kontrol Musik -->
         <div class="player-controls">
             <audio id="profileBgm" loop preload="none">
                 <source src="alex-morgan-soft-chill-background-music-548644.mp3" type="audio/mpeg">
             </audio>
-            <button id="playBtn" class="play-btn" aria-label="Putar Musik Latar">▶️ Putar Musik</button>
+            
+            <button id="playBtn" class="play-btn" aria-label="Putar Musik Latar">
+                ▶️ Putar Musik
+            </button>
         </div>
     </div>
 
