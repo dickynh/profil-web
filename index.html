@@ -9,13 +9,8 @@
         /* --- RESET & BASIC STYLE --- */
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
         body { 
-            background-color: #1a1a1a; 
-            color: #f0f0f0; 
-            overflow-x: hidden; 
-            user-select: none; 
-            -webkit-user-select: none; 
-            -moz-user-select: none; 
-            -ms-user-select: none; 
+            background-color: #1a1a1a; color: #f0f0f0; overflow-x: hidden; 
+            user-select: none; -webkit-user-select: none; -moz-user-select: none; -ms-user-select: none; 
             padding-bottom: 90px;
         }
         
@@ -28,8 +23,7 @@
         .logo-container { display: flex; align-items: center; gap: 12px; }
         .logo-img { width: 40px; height: 40px; object-fit: contain; pointer-events: none; }
         .logo-text { font-size: 1.5rem; font-weight: 800; letter-spacing: -1px; }
-        .logo-p { color: #8A2BE2; } 
-        .logo-i { color: #00D4FF; } 
+        .logo-p { color: #8A2BE2; } .logo-i { color: #00D4FF; } 
 
         nav ul { display: flex; list-style: none; gap: 20px; }
         nav a { color: #ffffff; transition: 0.3s; font-weight: 500; }
@@ -43,11 +37,9 @@
         }
         .profile-img-container {
             width: 150px; height: 150px; margin-bottom: 20px;
-            border-radius: 50%; overflow: hidden;
-            border: 4px solid #00d4ff;
+            border-radius: 50%; overflow: hidden; border: 4px solid #00d4ff;
             box-shadow: 0 0 25px rgba(0, 212, 255, 0.6);
-            opacity: 0; animation: zoomIn 1s forwards;
-            position: relative; z-index: 2;
+            opacity: 0; animation: zoomIn 1s forwards; position: relative; z-index: 2;
         }
         .profile-img { width: 100%; height: 100%; object-fit: cover; }
         .hero h1 { font-size: 2.5rem; margin-bottom: 10px; opacity: 0; animation: fadeInDown 1s 0.3s forwards; position: relative; z-index: 2; }
@@ -56,18 +48,14 @@
         .btn-group { display: flex; gap: 15px; flex-wrap: wrap; justify-content: center; opacity: 0; animation: fadeInUp 1s 0.9s forwards; position: relative; z-index: 2; }
         .btn {
             padding: 12px 30px; background: #00d4ff; color: #1a1a1a;
-            border-radius: 25px; font-weight: bold; cursor: pointer;
-            transition: transform 0.3s, box-shadow 0.3s;
+            border-radius: 25px; font-weight: bold; cursor: pointer; transition: transform 0.3s, box-shadow 0.3s;
         }
         .btn:hover { transform: scale(1.05); box-shadow: 0 0 20px #00d4ff; }
         .btn-secondary { background: transparent; border: 2px solid #00d4ff; color: #00d4ff; }
         .btn-secondary:hover { background: rgba(0, 212, 255, 0.1); box-shadow: none; }
 
         /* --- CANVAS BACKGROUND --- */
-        #brandCanvas {
-            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            z-index: 1; opacity: 1; 
-        }
+        #brandCanvas { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 1; opacity: 1; }
 
         /* --- ABOUT & SKILLS SECTION --- */
         section { padding: 80px 20px; max-width: 1000px; margin: 0 auto; position: relative; z-index: 2; }
@@ -154,23 +142,30 @@
             .play-btn { font-size: 0.7rem; padding: 8px 12px; }
         }
 
-        /* === CART FLOATING BUTTON === */
+        /* === CART FLOATING BUTTON (INTUITIF) === */
         .cart-float-btn {
-            position: fixed; bottom: 80px; right: 20px; z-index: 1002;
+            position: fixed; bottom: 85px; right: 20px; z-index: 1002;
             background: linear-gradient(135deg, #00d4ff, #0099cc);
-            width: 55px; height: 55px; border-radius: 50%;
+            width: 56px; height: 56px; border-radius: 50%;
             display: flex; align-items: center; justify-content: center;
             cursor: pointer; box-shadow: 0 4px 20px rgba(0,212,255,0.4);
             transition: all 0.3s ease; border: none;
+            animation: gentlePulse 3s infinite;
         }
-        .cart-float-btn:hover { transform: scale(1.1); box-shadow: 0 6px 25px rgba(0,212,255,0.6); }
-        .cart-icon { font-size: 1.5rem; }
+        .cart-float-btn:hover { transform: scale(1.1); box-shadow: 0 6px 25px rgba(0,212,255,0.6); animation: none; }
+        .cart-icon { font-size: 1.6rem; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2)); }
         .cart-badge {
-            position: absolute; top: -5px; right: -5px;
-            background: #ff6b6b; color: white; font-size: 0.7rem; font-weight: bold;
-            width: 22px; height: 22px; border-radius: 50%;
+            position: absolute; top: -2px; right: -2px;
+            background: #ff6b6b; color: white; font-size: 0.75rem; font-weight: 800;
+            min-width: 22px; height: 22px; border-radius: 11px;
             display: flex; align-items: center; justify-content: center;
-            border: 2px solid #1a1a1a;
+            border: 2px solid #1a1a1a; padding: 0 5px;
+            box-shadow: 0 2px 8px rgba(255,107,107,0.5);
+        }
+        @keyframes gentlePulse {
+            0% { box-shadow: 0 4px 20px rgba(0,212,255,0.4); }
+            50% { box-shadow: 0 4px 30px rgba(0,212,255,0.7); }
+            100% { box-shadow: 0 4px 20px rgba(0,212,255,0.4); }
         }
 
         /* === CHECKOUT MODAL === */
@@ -201,7 +196,7 @@
             display: flex; justify-content: space-between; align-items: center;
         }
         .product-info h3 { font-size: 0.95rem; margin-bottom: 4px; }
-        .product-price { color: var(--accent, #00d4ff); font-weight: bold; font-size: 0.9rem; }
+        .product-price { color: #00d4ff; font-weight: bold; font-size: 0.9rem; }
         
         .qty-control { display: flex; align-items: center; gap: 8px; }
         .qty-btn { 
@@ -232,6 +227,19 @@
         .pay-label { font-weight: bold; display: block; margin-bottom: 4px; font-size: 0.9rem; }
         .pay-desc { font-size: 0.7rem; color: #aaa; }
 
+        /* QRIS IMAGE CONTAINER */
+        .qris-preview {
+            display: none; text-align: center; margin-bottom: 20px;
+            padding: 15px; background: rgba(255,255,255,0.03); border-radius: 12px;
+            border: 1px dashed #444;
+        }
+        .qris-preview.active { display: block; animation: fadeInUp 0.3s ease; }
+        .qris-preview img { 
+            max-width: 200px; width: 100%; border-radius: 8px; 
+            background: white; padding: 10px; margin-bottom: 8px;
+        }
+        .qris-hint { font-size: 0.8rem; color: #aaa; }
+
         .btn-order { 
             width: 100%; padding: 14px; background: linear-gradient(135deg, #00d4ff, #0099cc); 
             border: none; border-radius: 12px; color: #1a1a1a; font-weight: 800; font-size: 1rem; 
@@ -242,8 +250,8 @@
         @media (max-width: 480px) {
             .payment-methods { grid-template-columns: 1fr; }
             .modal-content { padding: 20px; }
-            .cart-float-btn { bottom: 75px; right: 10px; width: 48px; height: 48px; }
-            .cart-icon { font-size: 1.3rem; }
+            .cart-float-btn { bottom: 80px; right: 15px; width: 50px; height: 50px; }
+            .cart-icon { font-size: 1.4rem; }
         }
     </style>
 </head>
@@ -285,7 +293,7 @@
         <div class="card-container">
             <div class="card scroll-element"><h3>🎨 Desain</h3><p>Fokus pada UI/UX yang bersih dan modern agar pengguna nyaman.</p></div>
             <div class="card scroll-element"><h3>💻 Coding</h3><p>Menguasai HTML, CSS, JavaScript, dan framework modern.</p></div>
-            <div class="card scroll-element"><h3> Performa</h3><p>Memastikan website cepat diakses dan ringan di semua perangkat.</p></div>
+            <div class="card scroll-element"><h3>⚡ Performa</h3><p>Memastikan website cepat diakses dan ringan di semua perangkat.</p></div>
         </div>
     </section>
 
@@ -381,7 +389,7 @@
 
     <!-- === CART FLOATING BUTTON === -->
     <button class="cart-float-btn" onclick="openCart()" aria-label="Buka Keranjang Belanja">
-        <span class="cart-icon"></span>
+        <span class="cart-icon">🛒</span>
         <span class="cart-badge" id="cartBadge">0</span>
     </button>
 
@@ -389,7 +397,7 @@
     <div class="modal-overlay" id="checkoutModal">
         <div class="modal-content">
             <button class="modal-close" onclick="closeCart()">✕</button>
-            <h2 style="color:#00d4ff; margin-bottom:20px; font-size:1.3rem;"> Keranjang Pesanan</h2>
+            <h2 style="color:#00d4ff; margin-bottom:20px; font-size:1.3rem;">🛒 Keranjang Pesanan</h2>
 
             <div class="product-list" id="modalProductList"></div>
 
@@ -418,6 +426,13 @@
                     <span class="pay-label">📱 QRIS</span>
                     <span class="pay-desc">Scan & bayar instan</span>
                 </label>
+            </div>
+
+            <!-- PREVIEW GAMBAR QRIS -->
+            <div class="qris-preview" id="qrisPreview">
+                <!-- GANTI SRC DI BAWAH INI DENGAN LINK/NAMA FILE QRIS AA -->
+                <img src="qris-pena-informatika.png" alt="Kode QRIS Pena Informatika" onerror="this.src='https://via.placeholder.com/200x200/ffffff/000000?text=QRIS+Placeholder'; this.alt='Ganti file qris-pena-informatika.png'">
+                <div class="qris-hint">Scan kode di atas menggunakan aplikasi e-wallet/mobile banking</div>
             </div>
 
             <button class="btn-order" onclick="processOrder()">Pesan Sekarang via WA</button>
@@ -556,6 +571,7 @@
                 </div>
             `).join('');
             calculateTotal();
+            toggleQrisDisplay(); // Pastikan status QRIS tetap sinkron saat render ulang
         }
 
         function updateQty(id, change) {
@@ -591,6 +607,16 @@
             selectedPayment = method;
             document.querySelectorAll('.pay-option').forEach(el => el.classList.remove('active'));
             event.currentTarget.classList.add('active');
+            toggleQrisDisplay(); // Tampilkan/sembunyikan QRIS saat ganti metode
+        }
+
+        function toggleQrisDisplay() {
+            const qrisBox = document.getElementById('qrisPreview');
+            if (selectedPayment === 'qris') {
+                qrisBox.classList.add('active');
+            } else {
+                qrisBox.classList.remove('active');
+            }
         }
 
         function processOrder() {
@@ -617,7 +643,7 @@
             message += `\n💰 *TOTAL: Rp ${total.toLocaleString('id-ID')}*\n\n`;
             
             if (selectedPayment === 'qris') {
-                message += `_Mohon kirimkan kode QRIS setelah admin membalas pesan ini._ ✅`;
+                message += `_Saya sudah melihat kode QRIS di website dan siap melakukan transfer._ ✅`;
             } else {
                 message += `_Pesanan akan diproses dan dikirim via kurir. Harap siapkan uang pas._`;
             }
