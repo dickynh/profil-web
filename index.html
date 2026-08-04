@@ -142,31 +142,53 @@
             .play-btn { font-size: 0.7rem; padding: 8px 12px; }
         }
 
-        /* === CART FLOATING BUTTON (INTUITIF) === */
-        .cart-float-btn {
-            position: fixed; bottom: 85px; right: 20px; z-index: 1002;
-            background: linear-gradient(135deg, #00d4ff, #0099cc);
-            width: 56px; height: 56px; border-radius: 50%;
-            display: flex; align-items: center; justify-content: center;
-            cursor: pointer; box-shadow: 0 4px 20px rgba(0,212,255,0.4);
-            transition: all 0.3s ease; border: none;
-            animation: gentlePulse 3s infinite;
-        }
-        .cart-float-btn:hover { transform: scale(1.1); box-shadow: 0 6px 25px rgba(0,212,255,0.6); animation: none; }
-        .cart-icon { font-size: 1.6rem; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2)); }
-        .cart-badge {
-            position: absolute; top: -2px; right: -2px;
-            background: #ff6b6b; color: white; font-size: 0.75rem; font-weight: 800;
-            min-width: 22px; height: 22px; border-radius: 11px;
-            display: flex; align-items: center; justify-content: center;
-            border: 2px solid #1a1a1a; padding: 0 5px;
-            box-shadow: 0 2px 8px rgba(255,107,107,0.5);
-        }
-        @keyframes gentlePulse {
-            0% { box-shadow: 0 4px 20px rgba(0,212,255,0.4); }
-            50% { box-shadow: 0 4px 30px rgba(0,212,255,0.7); }
-            100% { box-shadow: 0 4px 20px rgba(0,212,255,0.4); }
-        }
+        /* === CART FLOATING BUTTON (MINIMALIS TANPA BACKGROUND) === */
+.cart-float-btn {
+    position: fixed; 
+    bottom: 85px; 
+    right: 20px; 
+    z-index: 1002;
+    background: transparent; /* Menghilangkan warna biru */
+    width: auto; 
+    height: auto; 
+    border-radius: 0;
+    display: flex; 
+    align-items: center; 
+    justify-content: center;
+    cursor: pointer; 
+    box-shadow: none; /* Menghilangkan bayangan */
+    transition: all 0.3s ease; 
+    border: none;
+    padding: 10px; /* Memberi ruang sentuh agar mudah diklik */
+}
+
+.cart-float-btn:hover { 
+    transform: scale(1.2); 
+}
+
+.cart-icon { 
+    font-size: 2rem; /* Ukuran ikon diperbesar agar jelas tanpa background */
+    filter: drop-shadow(0 2px 6px rgba(0,0,0,0.4)); /* Bayangan pada ikon agar kontras */
+}
+
+.cart-badge {
+    position: absolute; 
+    top: 0px; 
+    right: -5px;
+    background: #ff6b6b; 
+    color: white; 
+    font-size: 0.7rem; 
+    font-weight: 800;
+    min-width: 18px; 
+    height: 18px; 
+    border-radius: 9px;
+    display: flex; 
+    align-items: center; 
+    justify-content: center;
+    border: 2px solid #1a1a1a;
+    padding: 0 4px;
+}
+
 
         /* === CHECKOUT MODAL === */
         .modal-overlay {
